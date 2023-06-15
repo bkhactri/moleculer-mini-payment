@@ -8,7 +8,7 @@ const WalletSchema = mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Service_MpcUser",
 		},
-		total: {
+		balance: {
 			type: Number,
 			default: 0,
 		},

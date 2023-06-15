@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const { MoleculerError } = require("moleculer").Errors;
+const { ObjectId } = require("mongodb");
 const JWT = require("jsonwebtoken");
 
 module.exports = async function (ctx) {
@@ -19,7 +20,7 @@ module.exports = async function (ctx) {
 		}
 
 		const account = await this.broker.call("v1.account.model.findOne", [
-			{ _id: decoded._id },
+			{ _id: ObjectId(decoded._id) },
 		]);
 
 		if (!_.get(account, "_id")) {
@@ -35,7 +36,10 @@ module.exports = async function (ctx) {
 
 		const updateInfo = await this.broker.call(
 			"v1.account.model.updateOne",
-			[{ _id: account._id }, { $set: { password: hashedPassword } }]
+			[
+				{ _id: ObjectId(account._id) },
+				{ $set: { password: hashedPassword } },
+			]
 		);
 
 		if (updateInfo.ok) {
@@ -48,12 +52,11 @@ module.exports = async function (ctx) {
 					message: "Reset password successfully",
 				},
 			};
-		} else {
-			throw new MoleculerError(
-				"Reset password failed. Please try again later",
-				400
-			);
 		}
+		throw new MoleculerError(
+			"Reset password failed. Please try again later",
+			400
+		);
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(`[Account->Reset Password]: ${err.message}`);

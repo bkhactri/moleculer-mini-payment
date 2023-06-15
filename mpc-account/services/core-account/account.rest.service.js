@@ -75,6 +75,36 @@ module.exports = {
 			handler: require("./actions/verify-token.action"),
 		},
 
+		forgotPassword: {
+			rest: {
+				method: "POST",
+				path: "/forgot-password",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					email: { type: "email" },
+				},
+			},
+			handler: require("./actions/forgot-password.action"),
+		},
+
+		resetPassword: {
+			rest: {
+				method: "POST",
+				path: "/reset-password",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					fpToken: "string",
+					oldPassword: "string",
+					newPassword: "string",
+				},
+			},
+			handler: require("./actions/reset-password.action"),
+		},
+
 		getAccountInfo: {
 			rest: {
 				auth: {
@@ -111,34 +141,39 @@ module.exports = {
 			handler: require("./actions/update-account-info.action"),
 		},
 
-		forgotPassword: {
+		getBalance: {
 			rest: {
-				method: "POST",
-				path: "/forgot-password",
-			},
-			params: {
-				body: {
-					$$type: "object",
-					email: { type: "email" },
+				auth: {
+					mode: "required",
 				},
+				method: "GET",
+				path: "/balance",
 			},
-			handler: require("./actions/forgot-password.action"),
+			params: {},
+			handler: require("./actions/get-account-balance.action"),
 		},
 
-		resetPassword: {
-			rest: {
-				method: "POST",
-				path: "/reset-password",
-			},
+		updateBalance: {
 			params: {
 				body: {
 					$$type: "object",
-					fpToken: "string",
-					oldPassword: "string",
-					newPassword: "string",
+					accountId: "string",
+					transactionAmount: {
+						type: "number",
+						min: 50000,
+						max: 500000000,
+					},
+					currency: {
+						type: "string",
+						enum: ["VND", "USD"], // Just VND as default :D
+					},
+					action: {
+						type: "string",
+						enum: ["ADD", "SUBTRACT"],
+					},
 				},
 			},
-			handler: require("./actions/reset-password.action"),
+			handler: require("./actions/update-account-balance.action"),
 		},
 	},
 
