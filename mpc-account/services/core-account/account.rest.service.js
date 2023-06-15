@@ -91,7 +91,7 @@ module.exports = {
 
 		resetPassword: {
 			rest: {
-				method: "POST",
+				method: "PUT",
 				path: "/reset-password",
 			},
 			params: {
@@ -122,7 +122,7 @@ module.exports = {
 				auth: {
 					mode: "required",
 				},
-				method: "POST",
+				method: "PUT",
 				path: "/:id",
 			},
 			params: {

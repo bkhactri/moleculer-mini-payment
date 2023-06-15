@@ -38,8 +38,8 @@ module.exports = async function (ctx) {
 		const newBalance =
 			wallet.balance +
 			(action === AccountWalletConstant.UPDATE_BALANCE_ACTION.ADD
-				? transactionAmount
-				: -transactionAmount);
+				? Math.abs(transactionAmount)
+				: -Math.abs(transactionAmount));
 
 		const updateAccountBalance = await this.broker.call(
 			"v1.wallet.model.updateOne",
