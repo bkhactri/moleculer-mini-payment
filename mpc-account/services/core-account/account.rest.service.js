@@ -98,16 +98,47 @@ module.exports = {
 			params: {
 				body: {
 					$$type: "object",
-					fullName: { type: "string" },
-					phone: { type: "string" },
-					email: { type: "email" },
+					fullName: { type: "string", optional: true },
+					phone: { type: "string", optional: true },
+					email: { type: "email", optional: true },
 					gender: {
 						type: "string",
 						enum: ["MALE", "FEMALE", "OTHER"],
+						optional: true,
 					},
 				},
 			},
 			handler: require("./actions/update-account-info.action"),
+		},
+
+		forgotPassword: {
+			rest: {
+				method: "POST",
+				path: "/forgot-password",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					email: { type: "email" },
+				},
+			},
+			handler: require("./actions/forgot-password.action"),
+		},
+
+		resetPassword: {
+			rest: {
+				method: "POST",
+				path: "/reset-password",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					fpToken: "string",
+					oldPassword: "string",
+					newPassword: "string",
+				},
+			},
+			handler: require("./actions/reset-password.action"),
 		},
 	},
 

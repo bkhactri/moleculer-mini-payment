@@ -31,10 +31,11 @@
     "moleculer-db": "^0.8.14",
     "moleculer-db-adapter-mongoose": "^0.8.10",
     "moleculer-db-adapter-mongoose-action": "^1.0.3",
+    "moment": "^2.29.4",
     "mongoose": "^5.12.13",
     "mongoose-auto-increment": "^5.0.1",
-    "moment": "^2.29.4",
-    "nats": "^2.7.1"
+    "nats": "^2.7.1",
+    "uuid": "^9.0.0"
   },
   "engines": {
     "node": ">= 16.x.x"
