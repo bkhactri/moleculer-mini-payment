@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const bcrypt = require("bcrypt");
 const { MoleculerError } = require("moleculer").Errors;
 
 module.exports = async function (ctx) {
@@ -19,8 +20,11 @@ module.exports = async function (ctx) {
 			};
 		}
 
+		const salt = bcrypt.genSaltSync(10);
+		const hashedPassword = bcrypt.hashSync(payload.password, salt);
+
 		const newUser = await this.broker.call("v1.account.model.create", [
-			payload,
+			{ ...payload, password: hashedPassword },
 		]);
 
 		return {

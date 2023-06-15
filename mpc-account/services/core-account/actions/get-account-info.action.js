@@ -13,15 +13,20 @@ module.exports = async function (ctx) {
 		const accountId = _.get(decodedToken, "_id");
 		const queryId = _.get(ctx.params.params, "id");
 
-		console.log("queryId", queryId);
-
 		if (accountId !== queryId) {
-			throw new MoleculerError("Can not get data", 401);
+			throw new MoleculerError(
+				"Get data failed. Please try again later",
+				401
+			);
 		}
 
 		const accountInfo = await this.broker.call("v1.account.model.findOne", [
 			{ _id: ObjectId(queryId) },
 		]);
+
+		if (!_.get(accountInfo, "_id")) {
+			throw new MoleculerError("Account not found", 404);
+		}
 
 		return {
 			code: 200,
@@ -39,6 +44,6 @@ module.exports = async function (ctx) {
 		};
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
-		throw new MoleculerError(`[Account->Logout]: ${err.message}`);
+		throw new MoleculerError(`[Account->Get Account Info]: ${err.message}`);
 	}
 };
