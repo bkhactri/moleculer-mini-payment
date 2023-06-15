@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const JWT = require("jsonwebtoken");
 const { MoleculerError } = require("moleculer").Errors;
 const { ObjectId } = require("mongodb");
 
@@ -11,12 +10,7 @@ module.exports = async function (ctx) {
 			throw new MoleculerError("Update data is empty", 400);
 		}
 
-		const decodedToken = JWT.verify(
-			_.get(ctx, "meta.auth.token"),
-			process.env.JWT_AUTH_TOKEN
-		);
-
-		const accountId = _.get(decodedToken, "_id");
+		const accountId = _.get(ctx.meta.auth, "_id");
 		const queryId = _.get(ctx.params.params, "id");
 
 		if (accountId !== queryId) {
@@ -36,7 +30,7 @@ module.exports = async function (ctx) {
 
 		const updateInfo = await this.broker.call(
 			"v1.account.model.updateOne",
-			[{ _id: queryId }, { $set: payload }]
+			[{ _id: ObjectId(queryId) }, { $set: payload }]
 		);
 
 		if (updateInfo.ok) {
@@ -55,12 +49,9 @@ module.exports = async function (ctx) {
 					},
 				},
 			};
-		} else {
-			throw new MoleculerError(
-				"Update failed. Please try again later",
-				400
-			);
 		}
+
+		throw new MoleculerError("Update failed. Please try again later", 400);
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(

@@ -1,16 +1,10 @@
 const _ = require("lodash");
-const JWT = require("jsonwebtoken");
 const { MoleculerError } = require("moleculer").Errors;
 const { ObjectId } = require("mongodb");
 
 module.exports = async function (ctx) {
 	try {
-		const decodedToken = JWT.verify(
-			_.get(ctx, "meta.auth.token"),
-			process.env.JWT_AUTH_TOKEN
-		);
-
-		const accountId = _.get(decodedToken, "_id");
+		const accountId = _.get(ctx.meta.auth, "_id");
 		const queryId = _.get(ctx.params.params, "id");
 
 		if (accountId !== queryId) {
