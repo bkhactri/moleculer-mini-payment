@@ -1,6 +1,5 @@
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
-const { ObjectId } = require("mongodb");
 
 module.exports = async function (ctx) {
 	try {
@@ -14,8 +13,8 @@ module.exports = async function (ctx) {
 			);
 		}
 
-		const accountInfo = await this.broker.call("v1.account.model.findOne", [
-			{ _id: ObjectId(queryId) },
+		const accountInfo = await this.broker.call("v1.accountModel.findOne", [
+			{ _id: queryId },
 		]);
 
 		if (!_.get(accountInfo, "_id")) {

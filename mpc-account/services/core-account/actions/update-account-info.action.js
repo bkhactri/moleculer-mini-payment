@@ -1,6 +1,5 @@
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
-const { ObjectId } = require("mongodb");
 
 module.exports = async function (ctx) {
 	try {
@@ -20,18 +19,18 @@ module.exports = async function (ctx) {
 			);
 		}
 
-		const account = await this.broker.call("v1.account.model.findOne", [
-			{ _id: ObjectId(queryId) },
+		const account = await this.broker.call("v1.accountModel.findOne", [
+			{ _id: queryId },
 		]);
 
 		if (!_.get(account, "_id")) {
 			throw new MoleculerError("Account not found", 404);
 		}
 
-		const updateInfo = await this.broker.call(
-			"v1.account.model.updateOne",
-			[{ _id: ObjectId(queryId) }, { $set: payload }]
-		);
+		const updateInfo = await this.broker.call("v1.accountModel.updateOne", [
+			{ _id: queryId },
+			{ $set: payload },
+		]);
 
 		if (updateInfo.ok) {
 			return {

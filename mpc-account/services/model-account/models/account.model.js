@@ -1,7 +1,9 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const autoIncrement = require("mongoose-auto-increment");
 const UserConstants = require("../constants/account.constant");
+
+autoIncrement.initialize(mongoose);
 
 const AccountSchema = mongoose.Schema(
 	{
@@ -35,11 +37,18 @@ const AccountSchema = mongoose.Schema(
 		},
 	},
 	{
-		collection: "Service_MpcUser",
+		collection: "Account",
 		versionKey: false,
 		timestamps: true,
 	}
 );
+
+AccountSchema.plugin(autoIncrement.plugin, {
+	model: `${AccountSchema.options.collection}-id`,
+	field: "id",
+	startAt: 1,
+	incrementBy: 1,
+});
 
 module.exports = mongoose.model(
 	AccountSchema.options.collection,

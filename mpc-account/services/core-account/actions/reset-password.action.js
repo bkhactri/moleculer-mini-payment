@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const { MoleculerError } = require("moleculer").Errors;
-const { ObjectId } = require("mongodb");
 const JWT = require("jsonwebtoken");
 
 module.exports = async function (ctx) {
@@ -19,8 +18,8 @@ module.exports = async function (ctx) {
 			throw new MoleculerError("fpToken invalid. Please try again", 400);
 		}
 
-		const account = await this.broker.call("v1.account.model.findOne", [
-			{ _id: ObjectId(decoded._id) },
+		const account = await this.broker.call("v1.accountModel.findOne", [
+			{ _id: decoded._id },
 		]);
 
 		if (!_.get(account, "_id")) {
@@ -34,13 +33,10 @@ module.exports = async function (ctx) {
 		const salt = bcrypt.genSaltSync(10);
 		const hashedPassword = bcrypt.hashSync(newPassword, salt);
 
-		const updateInfo = await this.broker.call(
-			"v1.account.model.updateOne",
-			[
-				{ _id: ObjectId(account._id) },
-				{ $set: { password: hashedPassword } },
-			]
-		);
+		const updateInfo = await this.broker.call("v1.accountModel.updateOne", [
+			{ _id: account._id },
+			{ $set: { password: hashedPassword } },
+		]);
 
 		if (updateInfo.ok) {
 			// Clean cache key after update password successfully

@@ -4,7 +4,7 @@ const MongooseAction = require("moleculer-db-adapter-mongoose-action");
 const OrderSchema = require("./models/order.model");
 
 module.exports = {
-	name: "order.model",
+	name: "orderModel",
 
 	version: 1,
 

@@ -6,7 +6,7 @@ module.exports = async function (ctx) {
 	try {
 		const { transaction } = ctx.params.body;
 
-		const order = await this.broker.call("v1.order.model.findOne", [
+		const order = await this.broker.call("v1.orderModel.findOne", [
 			{ transaction },
 		]);
 
@@ -21,7 +21,7 @@ module.exports = async function (ctx) {
 			);
 		}
 
-		const cancelOrder = await this.broker.call("v1.order.model.updateOne", [
+		const cancelOrder = await this.broker.call("v1.orderModel.updateOne", [
 			{ transaction },
 			{ $set: { state: PaymentConstant.ORDER_STATE.CANCELLED } },
 		]);

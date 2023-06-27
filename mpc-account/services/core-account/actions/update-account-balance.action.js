@@ -1,21 +1,20 @@
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
-const { ObjectId } = require("mongodb");
 const AccountWalletConstant = require("../constants/account-wallet.constant");
 
 module.exports = async function (ctx) {
 	try {
 		const { accountId, transactionAmount, action } = ctx.params.body;
-		const account = await this.broker.call("v1.account.model.findOne", [
-			{ _id: ObjectId(accountId) },
+		const account = await this.broker.call("v1.accountModel.findOne", [
+			{ _id: accountId },
 		]);
 
 		if (!_.get(account, "_id")) {
 			throw new MoleculerError("Account not found", 404);
 		}
 
-		const wallet = await this.broker.call("v1.wallet.model.findOne", [
-			{ accountId: ObjectId(accountId) },
+		const wallet = await this.broker.call("v1.walletModel.findOne", [
+			{ accountId: accountId },
 		]);
 
 		if (!_.get(wallet, "_id")) {
@@ -42,11 +41,8 @@ module.exports = async function (ctx) {
 				: -Math.abs(transactionAmount));
 
 		const updateAccountBalance = await this.broker.call(
-			"v1.wallet.model.updateOne",
-			[
-				{ accountId: ObjectId(accountId) },
-				{ $set: { balance: newBalance } },
-			]
+			"v1.walletModel.updateOne",
+			[{ accountId: accountId }, { $set: { balance: newBalance } }]
 		);
 
 		if (updateAccountBalance.ok) {

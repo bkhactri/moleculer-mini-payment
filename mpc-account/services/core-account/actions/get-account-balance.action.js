@@ -1,12 +1,11 @@
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
-const { ObjectId } = require("mongodb");
 
 module.exports = async function (ctx) {
 	try {
 		const accountId = _.get(ctx.meta.auth, "_id");
-		const wallet = await this.broker.call("v1.wallet.model.findOne", [
-			{ accountId: ObjectId(accountId) },
+		const wallet = await this.broker.call("v1.walletModel.findOne", [
+			{ accountId },
 		]);
 
 		if (!_.get(wallet, "_id")) {

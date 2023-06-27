@@ -1,12 +1,16 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
+const autoIncrement = require("mongoose-auto-increment");
 const WalletConstants = require("../constants/wallet.constant");
+
+autoIncrement.initialize(mongoose);
 
 const WalletSchema = mongoose.Schema(
 	{
 		accountId: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "Service_MpcUser",
+			type: Number,
+			require: true,
+			unique: true,
 		},
 		balance: {
 			type: Number,
@@ -19,10 +23,17 @@ const WalletSchema = mongoose.Schema(
 		},
 	},
 	{
-		collection: "Service_MpcWallet",
+		collection: "Wallet",
 		versionKey: false,
 		timestamps: true,
 	}
 );
+
+WalletSchema.plugin(autoIncrement.plugin, {
+	model: `${WalletSchema.options.collection}-id`,
+	field: "id",
+	startAt: 1,
+	incrementBy: 1,
+});
 
 module.exports = mongoose.model(WalletSchema.options.collection, WalletSchema);

@@ -4,9 +4,8 @@ const { MoleculerError } = require("moleculer").Errors;
 module.exports = async function (ctx) {
 	try {
 		const transaction = _.get(ctx.params.params, "transaction");
-		console.log("transaction", transaction);
 
-		const order = await this.broker.call("v1.order.model.findOne", [
+		const order = await this.broker.call("v1.orderModel.findOne", [
 			{ transaction },
 		]);
 

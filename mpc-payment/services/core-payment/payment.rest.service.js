@@ -47,10 +47,6 @@ module.exports = {
 						type: "string",
 						optional: true,
 					},
-					note: {
-						type: "string",
-						optional: true,
-					},
 					paymentMethod: {
 						type: "string",
 						enum: ["WALLET", "ATM_CARD"],
@@ -80,7 +76,13 @@ module.exports = {
 			params: {
 				body: {
 					$$type: "object",
-					transaction: "string",
+					transaction: {
+						type: "string",
+					},
+					note: {
+						type: "string",
+						optional: true,
+					},
 					payment: "object",
 				},
 			},

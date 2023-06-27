@@ -6,7 +6,7 @@ const JWT = require("jsonwebtoken");
 module.exports = async function (ctx) {
 	try {
 		const { email } = ctx.params.body;
-		const account = await this.broker.call("v1.account.model.findOne", [
+		const account = await this.broker.call("v1.accountModel.findOne", [
 			{ email },
 		]);
 

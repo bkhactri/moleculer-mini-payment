@@ -8,7 +8,7 @@ module.exports = async function (ctx) {
 		const payload = ctx.params.body;
 		const { account, password } = payload;
 
-		const acc = await this.broker.call("v1.account.model.findOne", [
+		const acc = await this.broker.call("v1.accountModel.findOne", [
 			{ $or: [{ email: account }, { phone: account }] },
 		]);
 

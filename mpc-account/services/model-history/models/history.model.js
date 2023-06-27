@@ -1,13 +1,18 @@
 const _ = require("lodash");
 const mongoose = require("mongoose");
 const autoIncrement = require("mongoose-auto-increment");
-const OrderConstants = require("../constants/order.constant");
+const HistoryConstants = require("../constants/history.constant");
 
 autoIncrement.initialize(mongoose);
 
-const OrderSchema = mongoose.Schema(
+const HistorySchema = mongoose.Schema(
 	{
 		accountId: {
+			type: Number,
+			require: true,
+			unique: true,
+		},
+		orderId: {
 			type: Number,
 			require: true,
 			unique: true,
@@ -18,6 +23,23 @@ const OrderSchema = mongoose.Schema(
 			unique: true,
 		},
 		amount: {
+			type: Number,
+			require: true,
+		},
+		fee: {
+			type: Number,
+			require: true,
+			default: 0,
+		},
+		total: {
+			type: Number,
+			require: true,
+		},
+		balanceBefore: {
+			type: Number,
+			require: true,
+		},
+		balanceAfter: {
 			type: Number,
 			require: true,
 		},
@@ -34,29 +56,27 @@ const OrderSchema = mongoose.Schema(
 			type: String,
 			required: false,
 		},
-		state: {
-			type: String,
-			enum: _.values(OrderConstants.ORDER_STATE),
-			default: OrderConstants.ORDER_STATE.PENDING,
-		},
 		paymentMethod: {
 			type: String,
-			enum: _.values(OrderConstants.ORDER_PAY_METHOD),
+			enum: _.values(HistoryConstants.HISTORY_PAY_METHOD),
 			required: true,
 		},
 	},
 	{
-		collection: "Order",
+		collection: "History",
 		versionKey: false,
 		timestamps: true,
 	}
 );
 
-OrderSchema.plugin(autoIncrement.plugin, {
-	model: `${OrderSchema.options.collection}-id`,
+HistorySchema.plugin(autoIncrement.plugin, {
+	model: `${HistorySchema.options.collection}-id`,
 	field: "id",
 	startAt: 1,
 	incrementBy: 1,
 });
 
-module.exports = mongoose.model(OrderSchema.options.collection, OrderSchema);
+module.exports = mongoose.model(
+	HistorySchema.options.collection,
+	HistorySchema
+);
