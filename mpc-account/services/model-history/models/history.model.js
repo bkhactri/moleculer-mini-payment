@@ -10,7 +10,6 @@ const HistorySchema = mongoose.Schema(
 		accountId: {
 			type: Number,
 			require: true,
-			unique: true,
 		},
 		orderId: {
 			type: Number,
@@ -71,7 +70,7 @@ const HistorySchema = mongoose.Schema(
 
 HistorySchema.plugin(autoIncrement.plugin, {
 	model: `${HistorySchema.options.collection}-id`,
-	field: "id",
+	field: "_id",
 	startAt: 1,
 	incrementBy: 1,
 });

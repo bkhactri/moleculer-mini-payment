@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
 "use strict";
+
+const { default: Redis } = require("ioredis");
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -27,6 +30,9 @@
  *
  * @type {import('moleculer').BrokerOptions}
  */
+
+const redisClient = new Redis(process.env.CACHER);
+
 module.exports = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: process.env.NAMESPACE,
@@ -64,7 +70,37 @@ module.exports = {
 
 	// Define a cacher.
 	// More info: https://moleculer.services/docs/0.14/caching.html
-	cacher: "Redis",
+	cacher: {
+		type: "Redis",
+		options: {
+			prefix: "MOL",
+			ttl: 30,
+			monitor: false,
+			redis: redisClient,
+			lock: {
+				ttl: 15,
+				staleTime: 10,
+			},
+			redlock: {
+				// Redis clients. Support node-redis or ioredis. By default will use the local client.
+				clients: [redisClient],
+				// the expected clock drift; for more details
+				// see http://redis.io/topics/distlock
+				driftFactor: 0.01, // time in ms
+
+				// the max number of times Redlock will attempt
+				// to lock a resource before erroring
+				retryCount: 10,
+
+				// the time in ms between attempts
+				retryDelay: 200, // time in ms
+
+				// the max time in ms randomly added to retries
+				// see https://www.awsarchitectureblog.com/2015/03/backoff.html
+				retryJitter: 200, // time in ms
+			},
+		},
+	},
 
 	// Define a serializer.
 	// Available values: "JSON", "Avro", "ProtoBuf", "MsgPack", "Notepack", "Thrift".

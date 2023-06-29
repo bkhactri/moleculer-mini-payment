@@ -5,7 +5,7 @@ const JWT = require("jsonwebtoken");
 
 module.exports = async function (ctx) {
 	try {
-		const { fpToken, oldPassword, newPassword } = ctx.params.body;
+		const { fpToken, newPassword } = ctx.params.body;
 		const secretKey = await this.broker.cacher.get(`fp.${fpToken}`);
 
 		if (!secretKey) {
@@ -24,10 +24,6 @@ module.exports = async function (ctx) {
 
 		if (!_.get(account, "_id")) {
 			throw new MoleculerError("Account not found", 404);
-		}
-
-		if (!bcrypt.compareSync(oldPassword, account.password)) {
-			throw new MoleculerError("Old password incorrect", 400);
 		}
 
 		const salt = bcrypt.genSaltSync(10);

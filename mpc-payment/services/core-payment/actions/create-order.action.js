@@ -22,7 +22,7 @@ module.exports = async function (ctx) {
 		const order = {
 			...payload,
 			status: PaymentConstant.ORDER_STATE.PENDING,
-			accountId,
+			ownerId: accountId,
 			transaction,
 		};
 
@@ -42,10 +42,10 @@ module.exports = async function (ctx) {
 				order: _.pick(newOrder, [
 					"transaction",
 					"amount",
-					"paymentMethod",
 					"state",
 					"currency",
 					"description",
+					"note",
 				]),
 			},
 		};

@@ -7,10 +7,9 @@ autoIncrement.initialize(mongoose);
 
 const OrderSchema = mongoose.Schema(
 	{
-		accountId: {
+		ownerId: {
 			type: Number,
 			require: true,
-			unique: true,
 		},
 		transaction: {
 			type: String,
@@ -39,11 +38,6 @@ const OrderSchema = mongoose.Schema(
 			enum: _.values(OrderConstants.ORDER_STATE),
 			default: OrderConstants.ORDER_STATE.PENDING,
 		},
-		paymentMethod: {
-			type: String,
-			enum: _.values(OrderConstants.ORDER_PAY_METHOD),
-			required: true,
-		},
 	},
 	{
 		collection: "Order",
@@ -54,7 +48,7 @@ const OrderSchema = mongoose.Schema(
 
 OrderSchema.plugin(autoIncrement.plugin, {
 	model: `${OrderSchema.options.collection}-id`,
-	field: "id",
+	field: "_id",
 	startAt: 1,
 	incrementBy: 1,
 });

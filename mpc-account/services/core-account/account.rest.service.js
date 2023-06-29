@@ -98,7 +98,6 @@ module.exports = {
 				body: {
 					$$type: "object",
 					fpToken: "string",
-					oldPassword: "string",
 					newPassword: "string",
 				},
 			},
@@ -149,28 +148,14 @@ module.exports = {
 				method: "GET",
 				path: "/balance",
 			},
-			params: {},
 			handler: require("./actions/get-account-balance.action"),
 		},
 
 		updateBalance: {
 			params: {
-				body: {
-					$$type: "object",
-					accountId: "string",
-					transactionAmount: {
-						type: "number",
-						min: 50000,
-						max: 500000000,
-					},
-					currency: {
-						type: "string",
-						enum: ["VND", "USD"], // Just VND as default :D
-					},
-					action: {
-						type: "string",
-						enum: ["ADD", "SUBTRACT"],
-					},
+				accountId: "number",
+				newBalance: {
+					type: "number",
 				},
 			},
 			handler: require("./actions/update-account-balance.action"),

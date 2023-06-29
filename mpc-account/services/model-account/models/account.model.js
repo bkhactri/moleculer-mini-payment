@@ -45,7 +45,7 @@ const AccountSchema = mongoose.Schema(
 
 AccountSchema.plugin(autoIncrement.plugin, {
 	model: `${AccountSchema.options.collection}-id`,
-	field: "id",
+	field: "_id",
 	startAt: 1,
 	incrementBy: 1,
 });

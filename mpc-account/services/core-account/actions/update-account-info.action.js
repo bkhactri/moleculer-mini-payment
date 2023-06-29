@@ -12,7 +12,7 @@ module.exports = async function (ctx) {
 		const accountId = _.get(ctx.meta.auth, "_id");
 		const queryId = _.get(ctx.params.params, "id");
 
-		if (accountId !== queryId) {
+		if (accountId != queryId) {
 			throw new MoleculerError(
 				"Update failed. Please try again later",
 				400

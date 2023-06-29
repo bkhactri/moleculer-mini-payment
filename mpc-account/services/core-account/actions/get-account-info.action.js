@@ -6,7 +6,10 @@ module.exports = async function (ctx) {
 		const accountId = _.get(ctx.meta.auth, "_id");
 		const queryId = _.get(ctx.params.params, "id");
 
-		if (accountId !== queryId) {
+		console.log(accountId);
+		console.log(queryId);
+
+		if (accountId != queryId) {
 			throw new MoleculerError(
 				"Get data failed. Please try again later",
 				401
