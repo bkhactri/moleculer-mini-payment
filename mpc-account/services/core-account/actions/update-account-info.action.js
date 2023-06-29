@@ -9,7 +9,7 @@ module.exports = async function (ctx) {
 			throw new MoleculerError(this.t(ctx, "auth.payloadEmpty"), 400);
 		}
 
-		const accountId = _.get(ctx.meta.auth, "_id");
+		const accountId = _.get(ctx.meta.auth, "id");
 		const queryId = _.get(ctx.params.params, "id");
 
 		if (accountId != queryId) {
@@ -17,15 +17,15 @@ module.exports = async function (ctx) {
 		}
 
 		const account = await this.broker.call("v1.accountModel.findOne", [
-			{ _id: queryId },
+			{ id: queryId },
 		]);
 
-		if (!_.get(account, "_id")) {
+		if (!_.get(account, "id")) {
 			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
 		const updateInfo = await this.broker.call("v1.accountModel.updateOne", [
-			{ _id: queryId },
+			{ id: queryId },
 			{ $set: payload },
 		]);
 

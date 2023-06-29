@@ -4,14 +4,14 @@ const PaymentConstant = require("../constants/payment.constant");
 
 module.exports = async function (ctx) {
 	try {
-		const accountId = _.get(ctx.meta.auth, "_id");
+		const accountId = _.get(ctx.meta.auth, "id");
 		const { transaction } = ctx.params.body;
 
 		const order = await this.broker.call("v1.orderModel.findOne", [
 			{ transaction },
 		]);
 
-		if (!_.get(order, "_id")) {
+		if (!_.get(order, "id")) {
 			throw new MoleculerError(this.t(ctx, "error.orderNotFound"), 404);
 		}
 

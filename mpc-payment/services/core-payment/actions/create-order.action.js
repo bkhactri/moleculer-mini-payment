@@ -6,13 +6,13 @@ const PaymentConstant = require("../constants/payment.constant");
 module.exports = async function (ctx) {
 	try {
 		const payload = ctx.params.body;
-		const accountId = _.get(ctx.meta.auth, "_id");
+		const accountId = _.get(ctx.meta.auth, "id");
 
 		const accountInfo = await this.broker.call("v1.accountModel.findOne", [
-			{ _id: accountId },
+			{ id: accountId },
 		]);
 
-		if (!_.get(accountInfo, "_id")) {
+		if (!_.get(accountInfo, "id")) {
 			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
@@ -30,7 +30,7 @@ module.exports = async function (ctx) {
 			order,
 		]);
 
-		if (!_.get(newOrder, "_id")) {
+		if (!_.get(newOrder, "id")) {
 			throw new MoleculerError(this.t(ctx, "fail.createOrder"), 400);
 		}
 
@@ -38,7 +38,7 @@ module.exports = async function (ctx) {
 			code: 201,
 			data: {
 				message: this.t(ctx, "success.createOrder"),
-				path: `payment/order?transaction=${transaction}`,
+				urlPath: `payment/order?transaction=${transaction}`,
 				order: _.pick(newOrder, [
 					"transaction",
 					"amount",

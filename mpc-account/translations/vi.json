@@ -1,6 +1,7 @@
 {
 	"auth.registerSuccess": "Tạo tài khoản thành công",
 	"auth.loginSuccess": "Đăng nhập thành công",
+	"auth.loginFail": "Đăng nhập thất bại",
 	"auth.logoutSuccess": "Đăng xuất thành công",
 	"auth.resetPassSuccess": "Đặt lại mật khẩu thành công",
 	"auth.invalidCredentials": "Thông tin đăng nhập không đúng",
@@ -17,6 +18,8 @@
 
 	"success.updated": "Cập nhật thành công",
 	"success.updatedBalance": "Cập nhật số dư tài khoản thành công",
+	"success.getBalance": "Lấy thông tin số dư thành công",
+	"success.getAccount": "Lấy thông tin cá nhân thành công",
 
 	"fail.updated": "Cập nhật thất bại",
 

@@ -1,6 +1,7 @@
 {
 	"auth.registerSuccess": "Registered successfully",
 	"auth.loginSuccess": "Login successfully",
+	"auth.loginFail": "Login failed",
 	"auth.logoutSuccess": "Logout successfully",
 	"auth.resetPassSuccess": "Reset password successfully",
 	"auth.invalidCredentials": "Invalid credentials",
@@ -17,6 +18,8 @@
 
 	"success.updated": "Updated successfully",
 	"success.updatedBalance": "Updated account balance successfully",
+	"success.getBalance": "Get account balance successfully",
+	"success.getAccount": "Get account successfully",
 
 	"fail.updated": "Updated failed",
 	"fail.updatedBalance": "Updated to account balance failed",

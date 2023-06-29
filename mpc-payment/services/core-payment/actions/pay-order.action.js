@@ -8,7 +8,7 @@ function delay(time) {
 }
 
 module.exports = async function (ctx) {
-	const accountId = _.get(ctx.meta.auth, "_id");
+	const accountId = _.get(ctx.meta.auth, "id");
 
 	const lock = await this.tryLock(accountId);
 
@@ -16,14 +16,14 @@ module.exports = async function (ctx) {
 
 	try {
 		try {
-			const accountId = _.get(ctx.meta.auth, "_id");
+			const accountId = _.get(ctx.meta.auth, "id");
 			const { transaction, note, payment } = ctx.params.body;
 
 			const order = await this.broker.call("v1.orderModel.findOne", [
 				{ transaction },
 			]);
 
-			if (!_.get(order, "_id")) {
+			if (!_.get(order, "id")) {
 				throw new MoleculerError(
 					this.t(ctx, "error.orderNotFound"),
 					404
@@ -46,7 +46,7 @@ module.exports = async function (ctx) {
 					[{ accountId }]
 				);
 
-				if (!_.get(wallet, "_id")) {
+				if (!_.get(wallet, "id")) {
 					throw new MoleculerError(
 						this.t(ctx, "error.walletNotFound"),
 						404
@@ -71,7 +71,7 @@ module.exports = async function (ctx) {
 					await this.broker.call("v1.historyModel.create", [
 						{
 							accountId,
-							orderId: order._id,
+							orderId: order.id,
 							..._.pick(order, [
 								"transaction",
 								"description",
@@ -90,7 +90,7 @@ module.exports = async function (ctx) {
 
 					// Mark order as complete
 					await this.broker.call("v1.orderModel.updateOne", [
-						{ _id: order._id },
+						{ id: order.id },
 						{
 							$set: {
 								state: PaymentConstant.ORDER_STATE.SUCCEEDED,
@@ -110,7 +110,7 @@ module.exports = async function (ctx) {
 					if (paidResult.code !== 200) {
 						// Restore action
 						await this.broker.call("v1.orderModel.updateOne", [
-							{ _id: order._id },
+							{ id: order.id },
 							{
 								$set: {
 									state: PaymentConstant.ORDER_STATE.FAILED,

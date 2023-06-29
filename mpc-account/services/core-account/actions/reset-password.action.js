@@ -25,10 +25,10 @@ module.exports = async function (ctx) {
 		}
 
 		const account = await this.broker.call("v1.accountModel.findOne", [
-			{ _id: decoded._id },
+			{ id: decoded.id },
 		]);
 
-		if (!_.get(account, "_id")) {
+		if (!_.get(account, "id")) {
 			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
@@ -36,7 +36,7 @@ module.exports = async function (ctx) {
 		const hashedPassword = bcrypt.hashSync(newPassword, salt);
 
 		const updateInfo = await this.broker.call("v1.accountModel.updateOne", [
-			{ _id: account._id },
+			{ id: account.id },
 			{ $set: { password: hashedPassword } },
 		]);
 

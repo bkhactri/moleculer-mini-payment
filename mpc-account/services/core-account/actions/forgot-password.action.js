@@ -10,7 +10,7 @@ module.exports = async function (ctx) {
 			{ email },
 		]);
 
-		if (!_.get(account, "_id")) {
+		if (!_.get(account, "id")) {
 			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
@@ -18,21 +18,25 @@ module.exports = async function (ctx) {
 
 		const fpToken = JWT.sign(
 			{
-				..._.pick(account, ["_id", "phone", "email"]),
+				..._.pick(account, ["id", "phone", "email"]),
 				server_env: process.env.NODE_ENV,
 			},
 			secretKey,
 			{ expiresIn: "1h" }
 		);
 
-		await this.broker.cacher.set(`fp.${fpToken}`, secretKey, 3600);
+		await this.broker.cacher.set(
+			`fp.${fpToken}`,
+			secretKey,
+			process.env.JWT_FORGOT_PASSWORD_TTL
+		);
 
 		return {
 			code: 200,
 			data: {
 				message: this.t(ctx, "auth.forgotPassHint"),
 				data: {
-					path: `/forgot-password/${fpToken}`,
+					urlPath: `/forgot-password/${fpToken}`,
 					fpToken,
 				},
 			},

@@ -27,13 +27,13 @@ module.exports = async function (ctx) {
 			{ ...payload, password: hashedPassword },
 		]);
 
-		if (_.get(newUser, "_id")) {
+		if (_.get(newUser, "id")) {
 			// Create account wallet
 			const wallet = await this.broker.call("v1.walletModel.create", [
-				{ accountId: newUser._id },
+				{ accountId: newUser.id },
 			]);
 
-			if (_.get(wallet, "_id")) {
+			if (_.get(wallet, "id")) {
 				return {
 					code: 201,
 					data: {
@@ -44,10 +44,14 @@ module.exports = async function (ctx) {
 							"phone",
 							"gender",
 						]),
-						wallet: _.pick(wallet, ["_id", "balance", "currency"]),
+						wallet: _.pick(wallet, ["id", "balance", "currency"]),
 					},
 				};
 			} else {
+				await this.broker.call("v1.accountModel.deleteOne", {
+					id: newUser.id,
+				});
+
 				throw new MoleculerError(
 					this.t(ctx, "auth.registerWalletFail"),
 					400

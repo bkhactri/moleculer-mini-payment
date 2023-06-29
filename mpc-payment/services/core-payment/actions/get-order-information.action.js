@@ -9,7 +9,7 @@ module.exports = async function (ctx) {
 			{ transaction },
 		]);
 
-		if (!_.get(order, "_id")) {
+		if (!_.get(order, "id")) {
 			throw new MoleculerError(this.t(ctx, "error.orderNotFound"), 404);
 		}
 

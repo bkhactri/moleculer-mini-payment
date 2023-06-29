@@ -70,7 +70,7 @@ const HistorySchema = mongoose.Schema(
 
 HistorySchema.plugin(autoIncrement.plugin, {
 	model: `${HistorySchema.options.collection}-id`,
-	field: "_id",
+	field: "id",
 	startAt: 1,
 	incrementBy: 1,
 });

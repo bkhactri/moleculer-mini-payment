@@ -48,7 +48,7 @@ const OrderSchema = mongoose.Schema(
 
 OrderSchema.plugin(autoIncrement.plugin, {
 	model: `${OrderSchema.options.collection}-id`,
-	field: "_id",
+	field: "id",
 	startAt: 1,
 	incrementBy: 1,
 });

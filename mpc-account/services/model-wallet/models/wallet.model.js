@@ -31,7 +31,7 @@ const WalletSchema = mongoose.Schema(
 
 WalletSchema.plugin(autoIncrement.plugin, {
 	model: `${WalletSchema.options.collection}-id`,
-	field: "_id",
+	field: "id",
 	startAt: 1,
 	incrementBy: 1,
 });

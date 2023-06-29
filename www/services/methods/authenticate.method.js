@@ -19,12 +19,9 @@ module.exports = async function (ctx, route, req) {
 			throw new MoleculerError("Invalid credentials", 401);
 		}
 
-		return validate.decoded
-			? {
-					..._.pick(validate.decoded, ["_id", "phone", "email"]),
-					token,
-			  }
-			: null;
+		const payload = _.pick(validate.decoded, ["id", "phone", "email"]);
+
+		return validate.decoded ? { ...payload, token } : null;
 	}
 
 	return null;

@@ -1,9 +1,5 @@
 module.exports = {
-	AUTH_MODE: {
-		REQUIRED: "required",
-		OPTIONAL: "optional",
-	},
-	TOKEN_STATE: {
+	STATE: {
 		ACTIVE: "ACTIVE",
 		DEACTIVE: "DEACTIVE",
 		EXPIRED: "EXPIRED",
