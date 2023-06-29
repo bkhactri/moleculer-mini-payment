@@ -1,9 +1,18 @@
+/* eslint-disable no-async-promise-executor */
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
 const PaymentConstant = require("../constants/payment.constant");
 
+function delay(time) {
+	return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 module.exports = async function (ctx) {
-	const lock = await this.tryLock(_.get(ctx.meta.auth, "_id"));
+	const accountId = _.get(ctx.meta.auth, "_id");
+
+	const lock = await this.tryLock(accountId);
+
+	await delay(Math.floor(Math.random() * 1000));
 
 	try {
 		try {
@@ -15,21 +24,16 @@ module.exports = async function (ctx) {
 			]);
 
 			if (!_.get(order, "_id")) {
-				throw new MoleculerError("Order not found", 404);
+				throw new MoleculerError(
+					this.t(ctx, "error.orderNotFound"),
+					404
+				);
 			}
 
 			if (_.get(order, "state") !== PaymentConstant.ORDER_STATE.PENDING) {
-				throw new MoleculerError("Order not available to pay", 400);
-			}
-
-			const wallet = await this.broker.call("v1.walletModel.findOne", [
-				{ accountId },
-			]);
-
-			if (!_.get(wallet, "_id")) {
 				throw new MoleculerError(
-					"Wallet not found. Please contact for support",
-					404
+					this.t(ctx, "error.orderNotAvailableToPay"),
+					400
 				);
 			}
 
@@ -37,12 +41,24 @@ module.exports = async function (ctx) {
 			let total = 0;
 
 			if (payment.method === PaymentConstant.ORDER_PAY_METHOD.WALLET) {
+				const wallet = await this.broker.call(
+					"v1.walletModel.findOne",
+					[{ accountId }]
+				);
+
+				if (!_.get(wallet, "_id")) {
+					throw new MoleculerError(
+						this.t(ctx, "error.walletNotFound"),
+						404
+					);
+				}
+
 				fee = 5000;
 				total = order.amount + fee;
 
 				if (wallet.balance < total) {
 					throw new MoleculerError(
-						"Wallet balance not enough to complete the transaction",
+						this.t(ctx, "error.balanceNotEnough"),
 						400
 					);
 				}
@@ -91,7 +107,7 @@ module.exports = async function (ctx) {
 						}
 					);
 
-					if (!paidResult.ok) {
+					if (paidResult.code !== 200) {
 						// Restore action
 						await this.broker.call("v1.orderModel.updateOne", [
 							{ _id: order._id },
@@ -110,7 +126,7 @@ module.exports = async function (ctx) {
 					return {
 						code: 200,
 						data: {
-							message: "Paid successfully",
+							message: this.t(ctx, "success.payOrder"),
 						},
 					};
 				} catch (error) {
@@ -122,7 +138,7 @@ module.exports = async function (ctx) {
 
 			if (payment.method === PaymentConstant.ORDER_PAY_METHOD.ATM_CARD) {
 				throw new MoleculerError(
-					"We do support this payment method yet",
+					this.t(ctx, "error.paymentMethodNotSupport"),
 					400
 				);
 			}

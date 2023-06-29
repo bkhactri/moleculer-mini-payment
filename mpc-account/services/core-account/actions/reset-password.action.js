@@ -9,13 +9,19 @@ module.exports = async function (ctx) {
 		const secretKey = await this.broker.cacher.get(`fp.${fpToken}`);
 
 		if (!secretKey) {
-			throw new MoleculerError("fpToken invalid. Please try again", 400);
+			throw new MoleculerError(
+				this.t(ctx, "field.invalid", { field: "fpToken" }),
+				400
+			);
 		}
 
 		const decoded = JWT.verify(fpToken, secretKey);
 
 		if (!decoded) {
-			throw new MoleculerError("fpToken invalid. Please try again", 400);
+			throw new MoleculerError(
+				this.t(ctx, "field.invalid", { field: "fpToken" }),
+				400
+			);
 		}
 
 		const account = await this.broker.call("v1.accountModel.findOne", [
@@ -23,7 +29,7 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(account, "_id")) {
-			throw new MoleculerError("Account not found", 404);
+			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
 		const salt = bcrypt.genSaltSync(10);
@@ -41,14 +47,11 @@ module.exports = async function (ctx) {
 			return {
 				code: 200,
 				data: {
-					message: "Reset password successfully",
+					message: this.t(ctx, "auth.resetPassSuccess"),
 				},
 			};
 		}
-		throw new MoleculerError(
-			"Reset password failed. Please try again later",
-			400
-		);
+		throw new MoleculerError(this.t(ctx, "auth.resetPassFail"), 400);
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(`[Account->Reset Password]: ${err.message}`);

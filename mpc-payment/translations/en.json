@@ -1,0 +1,18 @@
+{
+	"auth.accountNotFound": "Account not found",
+
+	"error.walletNotFound": "Wallet not found",
+	"error.orderNotFound": "Order not found",
+	"error.canNotCancelOrder": "Can not cancel this order",
+	"error.orderNotAvailableToPay": "Order is note available to pay",
+	"error.balanceNotEnough": "Wallet balance not enough to complete the transaction",
+	"error.paymentMethodNotSupport": "Payment method has not been supported yet",
+
+	"success.createOrder": "Order created successfully",
+	"success.getOrder": "Get order successfully",
+	"success.cancelOrder": "Order cancelled successfully",
+	"success.payOrder": "Order paid successfully",
+
+	"fail.createOrder": "Order create failed",
+	"fail.cancelOrder": "Order cancel failed"
+}

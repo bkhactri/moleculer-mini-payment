@@ -15,7 +15,7 @@ module.exports = async function (ctx) {
 			return {
 				code: 400,
 				data: {
-					message: "Email or phone has linked with another account",
+					message: this.t(ctx, "auth.duplicateCredentials"),
 				},
 			};
 		}
@@ -37,7 +37,7 @@ module.exports = async function (ctx) {
 				return {
 					code: 201,
 					data: {
-						message: "User registered successfully",
+						message: this.t(ctx, "auth.registerSuccess"),
 						user: _.pick(newUser, [
 							"fullName",
 							"email",
@@ -49,13 +49,13 @@ module.exports = async function (ctx) {
 				};
 			} else {
 				throw new MoleculerError(
-					"Register wallet failed. Please try again later",
+					this.t(ctx, "auth.registerWalletFail"),
 					400
 				);
 			}
 		} else {
 			throw new MoleculerError(
-				"Register account failed. Please try again later",
+				this.t(ctx, "auth.registerAccountFail"),
 				400
 			);
 		}

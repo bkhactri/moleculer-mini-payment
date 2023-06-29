@@ -14,7 +14,7 @@ module.exports = async function (ctx) {
 		return {
 			code: 200,
 			data: {
-				message: "Logged out",
+				message: this.t(ctx, "auth.logoutSuccess"),
 			},
 		};
 	} catch (err) {

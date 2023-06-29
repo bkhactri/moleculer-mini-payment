@@ -2,11 +2,11 @@ module.exports = {
 	name: "lock",
 	settings: {
 		lock: {
-			ttl: 1000,
+			ttl: 10000,
 		},
 	},
 	methods: {
-		/**
+		/**f
 		 * Try lock key
 		 * @param {String} key
 		 * @param {Object} opts
@@ -17,13 +17,13 @@ module.exports = {
 				this.broker.cacher.prefix +
 				[this.fullName, key, "lock"].filter((v) => !!v).join("-");
 
-			this.logger.debug("Check locked...", key);
+			console.log("Check locked...", key);
 
 			if (this.locks.has(key)) {
 				return this.locks.get(key);
 			}
 
-			this.logger.debug("Await locking...", key);
+			console.log("Await locking...", key);
 
 			const client =
 				"retryCount" in opts && opts.retryCount === 0
@@ -38,7 +38,7 @@ module.exports = {
 
 			lock.key = key;
 			this.locks.set(key, lock);
-			this.logger.debug(key, "Locked!");
+			console.log(key, "Locked!");
 			return lock;
 		},
 
@@ -103,15 +103,15 @@ module.exports = {
 				this.broker.fatal(e);
 			});
 			if (results.length)
-				this.logger.debug("Lock extended", this.settings.lock.ttl);
+				console.log("Lock extended", this.settings.lock.ttl);
 		}, shift);
 	},
 
 	async stopped() {
-		this.logger.debug("stopped...");
+		console.log("stopped...");
 		if (this.intervalLock) {
 			clearInterval(this.intervalLock);
-			this.logger.debug("clear interval lock");
+			console.log("clear interval lock");
 		}
 
 		const doUnlock = [...this.locks.values()].map((lock) => lock.unlock());

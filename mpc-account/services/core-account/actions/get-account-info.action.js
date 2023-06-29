@@ -10,10 +10,7 @@ module.exports = async function (ctx) {
 		console.log(queryId);
 
 		if (accountId != queryId) {
-			throw new MoleculerError(
-				"Get data failed. Please try again later",
-				401
-			);
+			throw new MoleculerError(this.t(ctx, "auth.notAuthorize"), 401);
 		}
 
 		const accountInfo = await this.broker.call("v1.accountModel.findOne", [
@@ -21,7 +18,7 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(accountInfo, "_id")) {
-			throw new MoleculerError("Account not found", 404);
+			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
 		return {

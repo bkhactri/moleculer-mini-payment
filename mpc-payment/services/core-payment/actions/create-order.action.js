@@ -13,7 +13,7 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(accountInfo, "_id")) {
-			throw new MoleculerError("Account not found", 404);
+			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
 		const transaction = uuid.v4();
@@ -31,13 +31,13 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(newOrder, "_id")) {
-			throw new MoleculerError("Create order failed", 400);
+			throw new MoleculerError(this.t(ctx, "fail.createOrder"), 400);
 		}
 
 		return {
 			code: 201,
 			data: {
-				message: "Order created successfully",
+				message: this.t(ctx, "success.createOrder"),
 				path: `payment/order?transaction=${transaction}`,
 				order: _.pick(newOrder, [
 					"transaction",

@@ -9,10 +9,7 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(wallet, "_id")) {
-			throw new MoleculerError(
-				"Account wallet not found. Please contact for support",
-				400
-			);
+			throw new MoleculerError(this.t(ctx, "error.walletNotFound"), 400);
 		}
 
 		return {

@@ -1,0 +1,18 @@
+{
+	"auth.accountNotFound": "Tài khoản không tồn tại",
+
+	"error.walletNotFound": "Không tìm thấy ví",
+	"error.orderNotFound": "Không tìm thấy đơn hàng",
+	"error.canNotCancelOrder": "Không thể huỷ đơn hàng này",
+	"error.orderNotAvailableToPay": "Không thể thanh toán đơn hàng này",
+	"error.balanceNotEnough": "Số dư không đủ để thực hiện giao dịch này",
+	"error.paymentMethodNotSupport": "Phương thức thanh toán chưa được hỗ trợ",
+
+	"success.createOrder": "Tạo đơn hàng thành công",
+	"success.getOrder": "Lấy đơn hàng thành công",
+	"success.cancelOrder": "Huỷ đơn hàng thành công",
+	"success.payOrder": "Thanh toán đơn hàng thành công",
+
+	"fail.createOrder": "Tạo đơn hàng thất bại",
+	"fail.cancelOrder": "Hủy đơn giản thất bại"
+}

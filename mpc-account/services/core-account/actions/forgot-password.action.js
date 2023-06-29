@@ -11,7 +11,7 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(account, "_id")) {
-			throw new MoleculerError("Account not found", 404);
+			throw new MoleculerError(this.t(ctx, "auth.accountNotFound"), 404);
 		}
 
 		const secretKey = uuid.v4();
@@ -30,8 +30,7 @@ module.exports = async function (ctx) {
 		return {
 			code: 200,
 			data: {
-				message:
-					"Use fptToken to verify reset password. This token will be expired in 1 hour",
+				message: this.t(ctx, "auth.forgotPassHint"),
 				data: {
 					path: `/forgot-password/${fpToken}`,
 					fpToken,

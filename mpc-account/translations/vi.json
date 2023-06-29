@@ -1,0 +1,24 @@
+{
+	"auth.registerSuccess": "Tạo tài khoản thành công",
+	"auth.loginSuccess": "Đăng nhập thành công",
+	"auth.logoutSuccess": "Đăng xuất thành công",
+	"auth.resetPassSuccess": "Đặt lại mật khẩu thành công",
+	"auth.invalidCredentials": "Thông tin đăng nhập không đúng",
+	"auth.duplicateCredentials": "Email và số điện thoại đã được sử dụng",
+	"auth.registerWalletFail": "Tạo ví thất bại",
+	"auth.registerAccountFail": "Tạo tài khoản thất bại",
+	"auth.accountNotFound": "Tài khoản không tồn tại",
+	"auth.resetPassFail": "Đặt lại mật khẩu thất bại",
+	"auth.forgotPassHint": "Sử dụng fptToken để xác minh đặt lại mật khẩu. Mã này sẽ hết hạn sau 1 giờ",
+	"auth.notAuthorize": "Bạn không có quyền truy cập dữ liệu này",
+
+	"error.walletNotFound": "Không tìm thấy ví",
+	"error.payloadEmpty": "Dữ liệu cập nhật trống",
+
+	"success.updated": "Cập nhật thành công",
+	"success.updatedBalance": "Cập nhật số dư tài khoản thành công",
+
+	"fail.updated": "Cập nhật thất bại",
+
+	"field.invalid": "%{field} không hợp lệ"
+}

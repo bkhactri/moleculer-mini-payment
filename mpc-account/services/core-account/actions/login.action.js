@@ -16,7 +16,7 @@ module.exports = async function (ctx) {
 			return {
 				code: 400,
 				data: {
-					message: "Invalid credentials",
+					message: this.t(ctx, "auth.invalidCredentials"),
 				},
 			};
 		}
@@ -33,7 +33,7 @@ module.exports = async function (ctx) {
 		return {
 			code: 200,
 			data: {
-				message: "Logged in successfully",
+				message: this.t(ctx, "auth.loginSuccess"),
 				accessToken,
 			},
 		};

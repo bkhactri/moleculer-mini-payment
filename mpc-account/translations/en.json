@@ -1,0 +1,25 @@
+{
+	"auth.registerSuccess": "Registered successfully",
+	"auth.loginSuccess": "Login successfully",
+	"auth.logoutSuccess": "Logout successfully",
+	"auth.resetPassSuccess": "Reset password successfully",
+	"auth.invalidCredentials": "Invalid credentials",
+	"auth.duplicateCredentials": "Email or phone is already used",
+	"auth.registerWalletFail": "Register wallet failed",
+	"auth.registerAccountFail": "Register account failed",
+	"auth.accountNotFound": "Account not found",
+	"auth.resetPassFail": "Reset password failed",
+	"auth.forgotPassHint": "Use fptToken to verify reset password. This token will be expired in 1 hour",
+	"auth.notAuthorize": "You are not authorized to access this data",
+
+	"error.walletNotFound": "Wallet not found",
+	"error.payloadEmpty": "Payload is empty",
+
+	"success.updated": "Updated successfully",
+	"success.updatedBalance": "Updated account balance successfully",
+
+	"fail.updated": "Updated failed",
+	"fail.updatedBalance": "Updated to account balance failed",
+
+	"field.invalid": "%{field} invalid"
+}

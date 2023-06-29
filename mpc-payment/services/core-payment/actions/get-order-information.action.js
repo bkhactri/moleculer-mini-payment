@@ -10,13 +10,13 @@ module.exports = async function (ctx) {
 		]);
 
 		if (!_.get(order, "_id")) {
-			throw new MoleculerError("Order not found", 404);
+			throw new MoleculerError(this.t(ctx, "error.orderNotFound"), 404);
 		}
 
 		return {
 			code: 200,
 			data: {
-				message: "Success",
+				message: this.t(ctx, "success.getOrder"),
 				order: _.pick(order, [
 					"transaction",
 					"amount",

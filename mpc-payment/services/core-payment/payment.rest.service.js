@@ -5,6 +5,8 @@
  */
 
 const RedLockMixin = require("../../mixins/lock.mixin");
+const { I18nMixin } = require("@codeyard/moleculer-i18n");
+const Polyglot = require("node-polyglot");
 
 /** @type {ServiceSchema} */
 module.exports = {
@@ -14,12 +16,18 @@ module.exports = {
 	/**
 	 * Mixins
 	 */
-	mixins: [RedLockMixin],
+	mixins: [RedLockMixin, I18nMixin],
 
 	/**
 	 * Settings
 	 */
-	settings: {},
+	settings: {
+		i18n: {
+			dirName: "translations",
+			languages: ["en", "vi"],
+			polyglot: new Polyglot(),
+		},
+	},
 
 	/**
 	 * Dependencies
@@ -96,6 +104,9 @@ module.exports = {
 		},
 
 		cancelOrder: {
+			auth: {
+				mode: "required",
+			},
 			rest: {
 				method: "POST",
 				path: "/order/cancel",

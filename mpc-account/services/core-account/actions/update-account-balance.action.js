@@ -11,18 +11,14 @@ module.exports = async function (ctx) {
 
 		if (updateAccountBalance.ok) {
 			return {
-				ok: 1,
 				code: 200,
 				data: {
-					message: "Updated account balance successfully",
+					message: this.t(ctx, "success.updatedBalance"),
 				},
 			};
 		}
 
-		throw new MoleculerError(
-			"Update account balance failed. Please try again later",
-			400
-		);
+		throw new MoleculerError(this.t(ctx, "fail.updatedBalance"), 400);
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(`[Account->Update Balance]: ${err.message}`);

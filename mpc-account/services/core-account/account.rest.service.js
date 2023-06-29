@@ -5,15 +5,29 @@
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
 
+const { I18nMixin } = require("@codeyard/moleculer-i18n");
+const Polyglot = require("node-polyglot");
+
 /** @type {ServiceSchema} */
 module.exports = {
 	name: "account",
 	version: 1,
 
 	/**
+	 * Mixins
+	 */
+	mixins: [I18nMixin],
+
+	/**
 	 * Settings
 	 */
-	settings: {},
+	settings: {
+		i18n: {
+			dirName: "translations",
+			languages: ["en", "vi"],
+			polyglot: new Polyglot(),
+		},
+	},
 
 	/**
 	 * Dependencies
