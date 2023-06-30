@@ -25,6 +25,7 @@
 	"success.getAccount": "Lấy thông tin cá nhân thành công",
 
 	"fail.updated": "Cập nhật thất bại",
+	"fail.updatedBalance": "Cập nhật số dư thất bại",
 
 	"field.invalid": "%{field} không hợp lệ"
 }

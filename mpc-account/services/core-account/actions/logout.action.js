@@ -23,10 +23,16 @@ module.exports = async function (ctx) {
 		}
 
 		const userToken = await this.broker.call("v1.userTokenModel.findOne", [
-			{ id: session.tokenId },
+			{
+				$and: [
+					{ id: session.tokenId },
+					{ state: AuthConstants.TOKEN_STATE.ACTIVE },
+				],
+			},
 		]);
 
 		if (
+			_.isEmpty(userToken) ||
 			userToken.token !== token ||
 			moment(new Date()).isAfter(moment(new Date(userToken.expiration)))
 		) {
