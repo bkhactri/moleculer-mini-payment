@@ -1,0 +1,8 @@
+module.exports = {
+	ORDER_STATE: {
+		PENDING: "PENDING",
+		SUCCEEDED: "SUCCEEDED",
+		FAILED: "FAILED",
+		CANCELLED: "CANCELLED",
+	},
+};
