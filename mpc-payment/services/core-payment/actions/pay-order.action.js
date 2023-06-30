@@ -118,9 +118,11 @@ module.exports = async function (ctx) {
 							},
 						]);
 
-						await this.broker.call("v1.historyModel.deleteOne", {
-							transaction,
-						});
+						await this.broker.call("v1.historyModel.delete", [
+							{
+								transaction,
+							},
+						]);
 					}
 
 					return {

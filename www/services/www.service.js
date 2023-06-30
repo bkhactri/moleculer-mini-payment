@@ -57,11 +57,12 @@ module.exports = {
 				 * @param {IncomingRequest} req
 				 * @param {ServerResponse} res
 				 * @param {Object} data
-				 *
+				 * **/
 				onBeforeCall(ctx, route, req, res) {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
-				}, */
+					ctx.meta.locale = req.headers["locale"];
+				},
 
 				/**
 				 * After call hook. You can modify the data.

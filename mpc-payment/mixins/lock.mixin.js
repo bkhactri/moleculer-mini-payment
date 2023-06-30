@@ -108,10 +108,10 @@ module.exports = {
 	},
 
 	async stopped() {
-		console.log("stopped...");
+		console.log("Stopped...");
 		if (this.intervalLock) {
 			clearInterval(this.intervalLock);
-			console.log("clear interval lock");
+			console.log("Clear interval lock");
 		}
 
 		const doUnlock = [...this.locks.values()].map((lock) => lock.unlock());

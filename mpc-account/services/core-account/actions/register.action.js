@@ -48,9 +48,11 @@ module.exports = async function (ctx) {
 					},
 				};
 			} else {
-				await this.broker.call("v1.accountModel.deleteOne", {
-					id: newUser.id,
-				});
+				await this.broker.call("v1.accountModel.delete", [
+					{
+						id: newUser.id,
+					},
+				]);
 
 				throw new MoleculerError(
 					this.t(ctx, "auth.registerWalletFail"),

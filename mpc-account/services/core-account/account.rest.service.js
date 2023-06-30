@@ -85,6 +85,7 @@ module.exports = {
 		verifyToken: {
 			params: {
 				token: "string",
+				userAgent: "string",
 			},
 			handler: require("./actions/verify-token.action"),
 		},

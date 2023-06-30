@@ -6,9 +6,6 @@ module.exports = async function (ctx) {
 		const accountId = _.get(ctx.meta.auth, "id");
 		const queryId = _.get(ctx.params.params, "id");
 
-		console.log(accountId);
-		console.log(queryId);
-
 		if (accountId != queryId) {
 			throw new MoleculerError(this.t(ctx, "auth.notAuthorize"), 401);
 		}

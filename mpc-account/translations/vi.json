@@ -3,6 +3,7 @@
 	"auth.loginSuccess": "Đăng nhập thành công",
 	"auth.loginFail": "Đăng nhập thất bại",
 	"auth.logoutSuccess": "Đăng xuất thành công",
+	"auth.logoutFail": "Đăng xuất thất bại",
 	"auth.resetPassSuccess": "Đặt lại mật khẩu thành công",
 	"auth.invalidCredentials": "Thông tin đăng nhập không đúng",
 	"auth.duplicateCredentials": "Email và số điện thoại đã được sử dụng",
@@ -15,6 +16,8 @@
 
 	"error.walletNotFound": "Không tìm thấy ví",
 	"error.payloadEmpty": "Dữ liệu cập nhật trống",
+	"error.sessionNotFound": "Phiên làm việc không tìm thấy",
+	"error.sessionNotValid": "Phiên làm việc khôgng hợp lệ",
 
 	"success.updated": "Cập nhật thành công",
 	"success.updatedBalance": "Cập nhật số dư tài khoản thành công",

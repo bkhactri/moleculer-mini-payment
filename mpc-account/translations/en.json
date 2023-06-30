@@ -3,6 +3,7 @@
 	"auth.loginSuccess": "Login successfully",
 	"auth.loginFail": "Login failed",
 	"auth.logoutSuccess": "Logout successfully",
+	"auth.logoutFail": "Logout failed",
 	"auth.resetPassSuccess": "Reset password successfully",
 	"auth.invalidCredentials": "Invalid credentials",
 	"auth.duplicateCredentials": "Email or phone is already used",
@@ -15,6 +16,8 @@
 
 	"error.walletNotFound": "Wallet not found",
 	"error.payloadEmpty": "Payload is empty",
+	"error.sessionNotFound": "Session not found",
+	"error.sessionNotValid": "Session not valid",
 
 	"success.updated": "Updated successfully",
 	"success.updatedBalance": "Updated account balance successfully",
