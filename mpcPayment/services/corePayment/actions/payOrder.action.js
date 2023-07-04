@@ -38,11 +38,9 @@ module.exports = async function (ctx) {
 				);
 			}
 
-			let fee = 0;
-
 			if (payment.method === PaymentConstant.ORDER_PAY_METHOD.WALLET) {
 				// Example fee and calculate total base on fee and amount
-				fee = 5000;
+				let fee = 2000;
 				const processTransaction = await this.broker.call(
 					"v1.account.updateBalance",
 					{
@@ -127,6 +125,9 @@ module.exports = async function (ctx) {
 			}
 
 			if (payment.method === PaymentConstant.ORDER_PAY_METHOD.ATM_CARD) {
+				// cardNumber, cardOwnerName, effectiveDate
+				console.log("PAYMENT", payment);
+
 				throw new MoleculerError(
 					this.t(ctx, "error.paymentMethodNotSupport"),
 					400

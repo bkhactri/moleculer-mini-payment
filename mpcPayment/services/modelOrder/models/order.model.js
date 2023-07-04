@@ -34,6 +34,18 @@ const OrderSchema = mongoose.Schema(
 			enum: _.values(OrderConstants.ORDER_STATE),
 			default: OrderConstants.ORDER_STATE.PENDING,
 		},
+		redirectUrl: {
+			type: String,
+			default: null,
+		},
+		failedUrl: {
+			type: String,
+			default: null,
+		},
+		ipnUrl: {
+			type: String,
+			default: null,
+		},
 		completedAt: {
 			type: Date,
 			required: false,
