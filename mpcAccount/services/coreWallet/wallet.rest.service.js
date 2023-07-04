@@ -1,4 +1,5 @@
 "use strict";
+
 /**
  * @typedef {import('moleculer').ServiceSchema} ServiceSchema Moleculer's Service Schema
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -10,7 +11,7 @@ const Polyglot = require("node-polyglot");
 
 /** @type {ServiceSchema} */
 module.exports = {
-	name: "payment",
+	name: "wallet",
 	version: 1,
 
 	/**
@@ -38,78 +39,33 @@ module.exports = {
 	 * Actions
 	 */
 	actions: {
-		createOrder: {
+		getBalance: {
 			rest: {
 				auth: {
 					mode: "required",
 				},
-				method: "POST",
-				path: "/order",
-			},
-			params: {
-				body: {
-					$$type: "object",
-					amount: {
-						type: "number",
-						min: 10000,
-					},
-					currency: {
-						type: "string",
-						enum: ["VND", "USD"],
-					},
-					description: {
-						type: "string",
-						optional: true,
-					},
-				},
-			},
-			handler: require("./actions/createOrder.action"),
-		},
-
-		getOrderInformation: {
-			rest: {
 				method: "GET",
-				path: "/order/:transaction",
+				path: "/balance",
 			},
-			params: {},
-			handler: require("./actions/getOrderInformation.action"),
+			handler: require("./actions/getAccountBalance.action"),
 		},
 
-		payOrder: {
-			rest: {
-				auth: {
-					mode: "required",
-				},
-				method: "POST",
-				path: "/order/pay",
-			},
+		updateBalance: {
 			params: {
-				body: {
-					$$type: "object",
-					transaction: {
-						type: "string",
-					},
-					payment: "object",
+				accountId: "number",
+				transaction: "number",
+				description: "string",
+				amount: "number",
+				fee: {
+					type: "number",
+					required: false,
+				},
+				action: {
+					type: "string",
+					enum: ["ADD", "SUBTRACT"],
 				},
 			},
-			handler: require("./actions/payOrder.action"),
-		},
-
-		cancelOrder: {
-			auth: {
-				mode: "required",
-			},
-			rest: {
-				method: "POST",
-				path: "/order/cancel",
-			},
-			params: {
-				body: {
-					$$type: "object",
-					transaction: "string",
-				},
-			},
-			handler: require("./actions/cancelOrder.action"),
+			handler: require("./actions/updateAccountBalance.action"),
 		},
 	},
 

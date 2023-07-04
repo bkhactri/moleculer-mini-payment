@@ -26,6 +26,7 @@
 
 	"fail.updated": "Cập nhật thất bại",
 	"fail.updatedBalance": "Cập nhật số dư thất bại",
+	"fail.createPaymentHistory": "Tạo lệnh thanh toán thất bại",
 
 	"field.invalid": "%{field} không hợp lệ"
 }

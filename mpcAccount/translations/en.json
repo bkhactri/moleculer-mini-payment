@@ -26,6 +26,7 @@
 
 	"fail.updated": "Updated failed",
 	"fail.updatedBalance": "Updated to account balance failed",
+	"fail.createPaymentHistory": "Failed to create payment history",
 
 	"field.invalid": "%{field} invalid"
 }

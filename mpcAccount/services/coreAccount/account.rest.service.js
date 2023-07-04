@@ -154,27 +154,6 @@ module.exports = {
 			},
 			handler: require("./actions/updateAccountInfo.action"),
 		},
-
-		getBalance: {
-			rest: {
-				auth: {
-					mode: "required",
-				},
-				method: "GET",
-				path: "/balance",
-			},
-			handler: require("./actions/getAccountBalance.action"),
-		},
-
-		updateBalance: {
-			params: {
-				accountId: "number",
-				newBalance: {
-					type: "number",
-				},
-			},
-			handler: require("./actions/updateAccountBalance.action"),
-		},
 	},
 
 	/**

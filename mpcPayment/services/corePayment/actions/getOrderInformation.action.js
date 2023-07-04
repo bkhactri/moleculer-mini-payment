@@ -24,7 +24,6 @@ module.exports = async function (ctx) {
 					"fee",
 					"state",
 					"currency",
-					"note",
 					"description",
 				]),
 			},

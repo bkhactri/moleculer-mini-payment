@@ -11,8 +11,10 @@
 	"success.createOrder": "Order created successfully",
 	"success.getOrder": "Get order successfully",
 	"success.cancelOrder": "Order cancelled successfully",
-	"success.payOrder": "Order paid successfully",
+	"success.payOrder": "Successful order payment with amount %{amount}",
 
 	"fail.createOrder": "Order create failed",
-	"fail.cancelOrder": "Order cancel failed"
+	"fail.cancelOrder": "Order cancel failed",
+	"fail.walletPayOrder": "Failed to process paying order with Wallet",
+	"fail.updateOrder": "Failed to update order"
 }

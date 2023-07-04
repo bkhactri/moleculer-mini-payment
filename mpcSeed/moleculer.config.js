@@ -77,7 +77,7 @@ module.exports = {
 	// Retry policy settings. More info: https://moleculer.services/docs/0.14/fault-tolerance.html#Retry
 	retryPolicy: {
 		// Enable feature
-		enabled: false,
+		enabled: true,
 		// Count of retries
 		retries: 5,
 		// First delay in milliseconds.

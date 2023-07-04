@@ -27,44 +27,20 @@ module.exports = async function (ctx) {
 			{ ...payload, password: hashedPassword },
 		]);
 
-		if (_.get(newUser, "id")) {
-			// Create account wallet
-			const wallet = await this.broker.call("v1.walletModel.create", [
-				{ accountId: newUser.id },
-			]);
-
-			if (_.get(wallet, "id")) {
-				return {
-					code: 201,
-					data: {
-						message: this.t(ctx, "auth.registerSuccess"),
-						user: _.pick(newUser, [
-							"fullName",
-							"email",
-							"phone",
-							"gender",
-						]),
-						wallet: _.pick(wallet, ["id", "balance", "currency"]),
-					},
-				};
-			} else {
-				await this.broker.call("v1.accountModel.delete", [
-					{
-						id: newUser.id,
-					},
-				]);
-
-				throw new MoleculerError(
-					this.t(ctx, "auth.registerWalletFail"),
-					400
-				);
-			}
-		} else {
+		if (!_.get(newUser, "id")) {
 			throw new MoleculerError(
 				this.t(ctx, "auth.registerAccountFail"),
 				400
 			);
 		}
+
+		return {
+			code: 201,
+			data: {
+				message: this.t(ctx, "auth.registerSuccess"),
+				user: _.pick(newUser, ["fullName", "email", "phone", "gender"]),
+			},
+		};
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(`[Account->Register]: ${err.message}`);

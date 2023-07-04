@@ -29,14 +29,14 @@ const OrderSchema = mongoose.Schema(
 			type: String,
 			required: false,
 		},
-		note: {
-			type: String,
-			required: false,
-		},
 		state: {
 			type: String,
 			enum: _.values(OrderConstants.ORDER_STATE),
 			default: OrderConstants.ORDER_STATE.PENDING,
+		},
+		completedAt: {
+			type: Date,
+			required: false,
 		},
 	},
 	{

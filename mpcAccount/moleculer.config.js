@@ -1,4 +1,7 @@
+/* eslint-disable no-unused-vars */
 "use strict";
+
+const { default: Redis } = require("ioredis");
 
 /**
  * Moleculer ServiceBroker configuration file
@@ -27,6 +30,9 @@
  *
  * @type {import('moleculer').BrokerOptions}
  */
+
+const redisClient = new Redis(process.env.CACHER);
+
 module.exports = {
 	// Namespace of nodes to segment your nodes on the same network.
 	namespace: process.env.NAMESPACE,
@@ -67,37 +73,31 @@ module.exports = {
 	cacher: {
 		type: "Redis",
 		options: {
+			prefix: "MOL_A",
+			ttl: 30,
+			monitor: false,
+			redis: redisClient,
+			lock: {
+				ttl: 15,
+				staleTime: 10,
+			},
 			redlock: {
-				// The expected clock drift; for more details
-				// See http://redis.io/topics/distlock
+				// Redis clients. Support node-redis or ioredis. By default will use the local client.
+				clients: [redisClient],
+				// the expected clock drift; for more details
+				// see http://redis.io/topics/distlock
 				driftFactor: 0.01, // time in ms
 
-				// The max number of times Redlock will attempt
-				// To lock a resource before erroring
+				// the max number of times Redlock will attempt
+				// to lock a resource before erroring
 				retryCount: 10,
 
-				// The time in ms between attempts
-				retryDelay: 1000, // time in ms
+				// the time in ms between attempts
+				retryDelay: 200, // time in ms
 
-				// The max time in ms randomly added to retries
-				// To improve performance under high contention
-				// See https://www.awsarchitectureblog.com/2015/03/backoff.html
+				// the max time in ms randomly added to retries
+				// see https://www.awsarchitectureblog.com/2015/03/backoff.html
 				retryJitter: 200, // time in ms
-			},
-			// Prefix for keys
-			prefix: "MOL",
-			// Set Time-to-live to 30sec.
-			ttl: 30,
-			// Turns Redis client monitoring on.
-			monitor: true,
-			// Redis settings
-			redis: {
-				host: "localhost",
-				port: 6379,
-			},
-			lock: {
-				ttl: 15, // The maximum amount of time you want the resource locked in seconds
-				staleTime: 10, // If the ttl is less than this number, means that the resources are staled
 			},
 		},
 	},
@@ -113,7 +113,7 @@ module.exports = {
 	// Retry policy settings. More info: https://moleculer.services/docs/0.14/fault-tolerance.html#Retry
 	retryPolicy: {
 		// Enable feature
-		enabled: false,
+		enabled: true,
 		// Count of retries
 		retries: 5,
 		// First delay in milliseconds.

@@ -11,11 +11,6 @@ const HistorySchema = mongoose.Schema(
 			type: Number,
 			require: true,
 		},
-		orderId: {
-			type: Number,
-			require: true,
-			unique: true,
-		},
 		transaction: {
 			type: String,
 			require: true,
@@ -27,7 +22,7 @@ const HistorySchema = mongoose.Schema(
 		},
 		fee: {
 			type: Number,
-			require: true,
+			require: false,
 			default: 0,
 		},
 		total: {
@@ -48,10 +43,6 @@ const HistorySchema = mongoose.Schema(
 			default: "VND",
 		},
 		description: {
-			type: String,
-			required: false,
-		},
-		note: {
 			type: String,
 			required: false,
 		},

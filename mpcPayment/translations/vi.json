@@ -11,8 +11,10 @@
 	"success.createOrder": "Tạo đơn hàng thành công",
 	"success.getOrder": "Lấy đơn hàng thành công",
 	"success.cancelOrder": "Huỷ đơn hàng thành công",
-	"success.payOrder": "Thanh toán đơn hàng thành công",
+	"success.payOrder": "Thanh toán đơn hàng thành công số tiền %{amount}",
 
 	"fail.createOrder": "Tạo đơn hàng thất bại",
-	"fail.cancelOrder": "Hủy đơn giản thất bại"
+	"fail.cancelOrder": "Hủy đơn giản thất bại",
+	"fail.walletPayOrder": "Thanh toán hoá đơn bằng Ví thất bại",
+	"fail.updateOrder": "Cập nhật đơn hàng thất bại"
 }

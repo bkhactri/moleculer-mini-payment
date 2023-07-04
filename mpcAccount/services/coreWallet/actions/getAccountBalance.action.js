@@ -3,13 +3,28 @@ const { MoleculerError } = require("moleculer").Errors;
 
 module.exports = async function (ctx) {
 	try {
-		const accountId = _.get(ctx.meta.auth, "id");
-		const wallet = await this.broker.call("v1.walletModel.findOne", [
+		const accountId =
+			_.get(ctx.meta.auth, "id") || _.get(ctx.params, "accountId");
+
+		let wallet = await this.broker.call("v1.walletModel.findOne", [
 			{ accountId },
 		]);
 
 		if (!_.get(wallet, "id")) {
-			throw new MoleculerError(this.t(ctx, "error.walletNotFound"), 400);
+			// Create if not exist
+			wallet = await this.broker.call(
+				"v1.walletModel.create",
+				[{ accountId }],
+				{ retries: 3 }
+			);
+
+			// Check if wallet created again
+			if (!_.get(wallet, "id")) {
+				throw new MoleculerError(
+					this.t(ctx, "error.walletNotFound"),
+					400
+				);
+			}
 		}
 
 		return {

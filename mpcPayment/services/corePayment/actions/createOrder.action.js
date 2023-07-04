@@ -45,7 +45,6 @@ module.exports = async function (ctx) {
 					"state",
 					"currency",
 					"description",
-					"note",
 				]),
 			},
 		};
