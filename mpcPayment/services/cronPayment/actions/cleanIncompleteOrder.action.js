@@ -1,22 +1,38 @@
-const { MoleculerError } = require("moleculer").Errors;
+const _ = require("lodash");
 const CronPaymentConstants = require("../constants/cronPayment.constant");
+const { MoleculerError } = require("moleculer").Errors;
 
-module.exports = function () {
+module.exports = async function (ctx) {
 	try {
-		console.log("🚀🚀 CleanIncompleteOrder JOB ticked 🚀🚀");
-
-		// Enhance later
 		const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000);
-		this.broker.call("v1.orderModel.updateMany", [
+		const expiredOrders = await ctx.broker.call("v1.orderModel.findMany", [
 			{
 				createdAt: { $lte: twoHoursAgo },
-				state: { $ne: CronPaymentConstants.ORDER_STATE.PENDING },
-			},
-			{
-				$set: { status: CronPaymentConstants.ORDER_STATE.CANCELLED },
+				state: CronPaymentConstants.ORDER_STATE.PENDING,
 			},
 		]);
+
+		console.log("Expired Orders: ", expiredOrders);
+
+		if (expiredOrders.length) {
+			for (let i = 0; i <= expiredOrders.length - 1; i++) {
+				await ctx.broker.call("v1.payment.updateAsyncOrder", {
+					id: _.get(expiredOrders[i], "id"),
+					data: [
+						{ id: _.get(expiredOrders[i], "id") },
+						{
+							$set: {
+								state: CronPaymentConstants.ORDER_STATE
+									.CANCELLED,
+							},
+						},
+					],
+				});
+
+				console.log(`Cancelled Order Id #${i}`);
+			}
+		}
 	} catch (error) {
-		throw new MoleculerError(error.message, 401, null, error.data);
+		throw new MoleculerError(error.message, 400, null, error.data);
 	}
 };

@@ -7,6 +7,12 @@
 const RedLockMixin = require("../../mixins/lock.mixin");
 const { I18nMixin } = require("@codeyard/moleculer-i18n");
 const Polyglot = require("node-polyglot");
+const QueueMixin = require("moleculer-rabbitmq");
+
+const queueMixin = QueueMixin({
+	connection: process.env.RABBITMQ_URI,
+	asyncActions: true,
+});
 
 /** @type {ServiceSchema} */
 module.exports = {
@@ -16,7 +22,7 @@ module.exports = {
 	/**
 	 * Mixins
 	 */
-	mixins: [RedLockMixin, I18nMixin],
+	mixins: [RedLockMixin, I18nMixin, queueMixin],
 
 	/**
 	 * Settings
@@ -110,6 +116,25 @@ module.exports = {
 				},
 			},
 			handler: require("./actions/cancelOrder.action"),
+		},
+
+		updateAsyncOrder: {
+			queue: {
+				amqp: {
+					queueAssert: {
+						durable: true,
+					},
+					consume: {
+						noAck: false,
+					},
+					prefetch: 0,
+				},
+			},
+			params: {
+				id: "number",
+				data: "array",
+			},
+			handler: require("./actions/updateAsyncOrder.action"),
 		},
 	},
 
