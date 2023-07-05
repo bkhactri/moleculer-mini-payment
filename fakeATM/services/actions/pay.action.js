@@ -6,26 +6,27 @@ const uniqid = require("uniqid");
 
 module.exports = async function (ctx) {
 	try {
+		// Simulator pay handler and call IPN
 		setTimeout(() => {
 			// Handle pay FAKE PAY BY ATM CARD
 			// => ...
 
 			const { orderId, transaction, amount, notifyUrl } = ctx.params.body;
 
-			const atmTransaction = uniqid();
+			const partnerTransaction = uniqid();
 
 			console.log({
 				transaction,
-				atmTransaction,
+				partnerTransaction,
 				orderId,
 				amount,
 				state: "SUCCESS",
 			});
-			// Handle IPN
 
+			// 	Handle IPN
 			axios.post(notifyUrl, {
 				transaction,
-				atmTransaction,
+				partnerTransaction,
 				orderId,
 				amount,
 				state: "SUCCESS",
@@ -45,10 +46,3 @@ module.exports = async function (ctx) {
 		throw new MoleculerError(`[Fake ATM->Pay Action]: ${error.message}`);
 	}
 };
-// {
-//   transaction: '00af5cd4-e22b-4f2f-9243-b64f92703674',
-//   atmTransaction: '3qxtuumqvljpgw60p',
-//   orderId: 5,
-//   amount: 120000,
-//   state: 'SUCCESS'
-// }

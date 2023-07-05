@@ -5,7 +5,7 @@ const PaymentConstants = require("../constants/payment.constant");
 
 module.exports = async function (ctx) {
 	try {
-		const { atmTransaction, orderId, state } = ctx.params.body;
+		const { partnerTransaction, orderId, state } = ctx.params.body;
 
 		const updatedOrder = await this.broker.call(
 			"v1.orderModel.updateOne",
@@ -33,7 +33,7 @@ module.exports = async function (ctx) {
 				{ orderId },
 				{
 					$set: {
-						atmTransactionId: atmTransaction,
+						partnerTransaction,
 						state:
 							state === "SUCCESS"
 								? PaymentConstants.HISTORY_STATE.COMPLETED

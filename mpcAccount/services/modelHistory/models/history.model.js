@@ -60,7 +60,7 @@ const HistorySchema = mongoose.Schema(
 			enum: _.values(HistoryConstants.HISTORY_STATE),
 			default: HistoryConstants.HISTORY_STATE.PENDING,
 		},
-		atmTransactionId: {
+		partnerTransaction: {
 			type: String,
 			require: false,
 			default: null,

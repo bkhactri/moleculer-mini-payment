@@ -187,6 +187,12 @@ module.exports = async function (ctx) {
 							order.currency
 						}`,
 					}),
+					order: {
+						id: order.id,
+						transaction,
+						redirectUrl,
+						ipnUrl,
+					},
 				},
 			};
 		}

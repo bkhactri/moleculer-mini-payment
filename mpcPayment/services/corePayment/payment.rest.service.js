@@ -159,7 +159,7 @@ module.exports = {
 					orderId: "number",
 					transaction: "string",
 					amount: "number",
-					atmTransaction: "string",
+					partnerTransaction: "string",
 					state: "string",
 				},
 			},
