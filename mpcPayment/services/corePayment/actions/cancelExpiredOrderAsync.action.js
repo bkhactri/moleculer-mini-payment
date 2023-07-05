@@ -1,24 +1,18 @@
 const { MoleculerError } = require("moleculer").Errors;
 
 module.exports = async function (ctx) {
-	const orderId = ctx.params.id;
-
-	const lock = await this.tryLock(orderId);
-
-	console.log("params", ctx.params);
-
 	try {
-		const result = await this.broker.call(
-			"v1.orderModel.updateOne",
-			ctx.params.data
-		);
-
-		await this.unlock(lock.key);
+		const result = await this.broker.call("v1.orderModel.updateOne", [
+			{ id: ctx.params.id },
+			{
+				$set: {
+					state: "CANCELLED",
+				},
+			},
+		]);
 
 		return result;
 	} catch (error) {
-		await this.unlock(lock.key);
-
 		if (error.name === "MoleculerError") {
 			throw error;
 		}

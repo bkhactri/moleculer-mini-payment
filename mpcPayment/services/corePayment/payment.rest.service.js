@@ -118,7 +118,7 @@ module.exports = {
 			handler: require("./actions/cancelOrder.action"),
 		},
 
-		updateAsyncOrder: {
+		cancelExpiredOrderAsync: {
 			queue: {
 				amqp: {
 					queueAssert: {
@@ -129,12 +129,12 @@ module.exports = {
 					},
 					prefetch: 0,
 				},
+				dedupHash: (ctx) => ctx.params.id,
 			},
 			params: {
 				id: "number",
-				data: "array",
 			},
-			handler: require("./actions/updateAsyncOrder.action"),
+			handler: require("./actions/cancelExpiredOrderAsync.action"),
 		},
 	},
 
