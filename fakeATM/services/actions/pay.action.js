@@ -1,5 +1,4 @@
 /* eslint-disable no-async-promise-executor */
-const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
 const axios = require("axios");
 const uniqid = require("uniqid");
