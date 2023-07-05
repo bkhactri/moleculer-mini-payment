@@ -12,9 +12,13 @@
 	"success.getOrder": "Lấy đơn hàng thành công",
 	"success.cancelOrder": "Huỷ đơn hàng thành công",
 	"success.payOrder": "Thanh toán đơn hàng thành công số tiền %{amount}",
+	"success.processPayAtmOrder": "Thành công tiến hành thoánh toán số tiền %{amount} với thẻ ATM",
+	"success.createPaymentHistory": "Tạo lệnh thanh toán thành công",
 
 	"fail.createOrder": "Tạo đơn hàng thất bại",
 	"fail.cancelOrder": "Hủy đơn giản thất bại",
 	"fail.walletPayOrder": "Thanh toán hoá đơn bằng Ví thất bại",
-	"fail.updateOrder": "Cập nhật đơn hàng thất bại"
+	"fail.atmCardPayOrder": "Thanh toán hoá đơn bằng thẻ ATM thất bại",
+	"fail.updateOrder": "Cập nhật đơn hàng thất bại",
+	"fail.createPaymentHistory": "Tạo lệnh thanh toán thất bại"
 }

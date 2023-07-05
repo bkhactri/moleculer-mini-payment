@@ -136,6 +136,35 @@ module.exports = {
 			},
 			handler: require("./actions/cancelExpiredOrderAsync.action"),
 		},
+
+		createAtmCardTransaction: {
+			params: {
+				orderId: "number",
+				transaction: "string",
+				description: "string",
+				amount: "number",
+				currency: "string",
+			},
+			handler: require("./actions/createAtmCardTransaction.action"),
+		},
+
+		ipn: {
+			rest: {
+				method: "POST",
+				path: "/ipn",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					orderId: "number",
+					transaction: "string",
+					amount: "number",
+					atmTransaction: "string",
+					state: "string",
+				},
+			},
+			handler: require("./actions/ipn-handler.action"),
+		},
 	},
 
 	/**

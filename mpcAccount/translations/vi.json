@@ -21,11 +21,13 @@
 
 	"success.updated": "Cập nhật thành công",
 	"success.updatedBalance": "Cập nhật số dư tài khoản thành công",
+	"success.createAtmTransaction": "Tạo lệnh thanh toán thẻ ATM thành công",
 	"success.getBalance": "Lấy thông tin số dư thành công",
 	"success.getAccount": "Lấy thông tin cá nhân thành công",
 
 	"fail.updated": "Cập nhật thất bại",
 	"fail.updatedBalance": "Cập nhật số dư thất bại",
+	"fail.createAtmTransaction": "Tạo lệnh thanh toán thẻ ATM thất bại",
 	"fail.createPaymentHistory": "Tạo lệnh thanh toán thất bại",
 
 	"field.invalid": "%{field} không hợp lệ"

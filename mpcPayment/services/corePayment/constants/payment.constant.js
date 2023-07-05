@@ -9,4 +9,9 @@ module.exports = {
 		FAILED: "FAILED",
 		CANCELLED: "CANCELLED",
 	},
+	HISTORY_STATE: {
+		FAILED: "FAILED",
+		PENDING: "PENDING",
+		COMPLETED: "COMPLETED",
+	},
 };

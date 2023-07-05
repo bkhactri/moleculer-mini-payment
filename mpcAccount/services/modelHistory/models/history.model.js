@@ -9,7 +9,11 @@ const HistorySchema = mongoose.Schema(
 	{
 		accountId: {
 			type: Number,
-			require: true,
+			require: false,
+		},
+		orderId: {
+			type: Number,
+			require: false,
 		},
 		transaction: {
 			type: String,
@@ -31,11 +35,11 @@ const HistorySchema = mongoose.Schema(
 		},
 		balanceBefore: {
 			type: Number,
-			require: true,
+			require: false,
 		},
 		balanceAfter: {
 			type: Number,
-			require: true,
+			require: false,
 		},
 		currency: {
 			type: String,
@@ -50,6 +54,16 @@ const HistorySchema = mongoose.Schema(
 			type: String,
 			enum: _.values(HistoryConstants.HISTORY_PAY_METHOD),
 			required: true,
+		},
+		state: {
+			type: String,
+			enum: _.values(HistoryConstants.HISTORY_STATE),
+			default: HistoryConstants.HISTORY_STATE.PENDING,
+		},
+		atmTransactionId: {
+			type: String,
+			require: false,
+			default: null,
 		},
 	},
 	{

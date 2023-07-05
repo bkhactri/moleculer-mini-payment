@@ -3,4 +3,9 @@ module.exports = {
 		WALLET: "WALLET",
 		ATM_CARD: "ATM_CARD",
 	},
+	HISTORY_STATE: {
+		FAILED: "FAILED",
+		PENDING: "PENDING",
+		COMPLETED: "COMPLETED",
+	},
 };

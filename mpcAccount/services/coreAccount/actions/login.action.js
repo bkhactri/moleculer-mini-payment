@@ -43,7 +43,6 @@ module.exports = async function (ctx) {
 		);
 
 		// If user login on another device while still save session on other,
-		// => Terminate current session and token
 		if (!_.isEmpty(session)) {
 			// Update token by session id
 			const updatedToken = await this.broker.call(

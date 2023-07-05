@@ -38,10 +38,6 @@ const OrderSchema = mongoose.Schema(
 			type: String,
 			default: null,
 		},
-		failedUrl: {
-			type: String,
-			default: null,
-		},
 		ipnUrl: {
 			type: String,
 			default: null,
@@ -49,6 +45,11 @@ const OrderSchema = mongoose.Schema(
 		completedAt: {
 			type: Date,
 			required: false,
+		},
+		paymentMethod: {
+			type: String,
+			enum: _.values(OrderConstants.ORDER_PAY_METHOD),
+			require: false,
 		},
 	},
 	{

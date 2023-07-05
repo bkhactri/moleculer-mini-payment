@@ -1,6 +1,6 @@
+/* eslint-disable no-unused-vars */
 "use strict";
 
-const _ = require("lodash");
 const ApiGateway = require("moleculer-web");
 
 /**
@@ -12,37 +12,35 @@ const ApiGateway = require("moleculer-web");
  */
 
 module.exports = {
-	name: "www",
+	name: "api",
 	mixins: [ApiGateway],
 
 	/** @type {ApiSettingsSchema} More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html */
 	settings: {
 		// Exposed port
-		port: process.env.PORT || 3000,
+		port: process.env.PORT || 3001,
 
 		// Exposed IP
-		ip: process.env.IP || "0.0.0.0",
+		ip: "0.0.0.0",
 
 		// Global Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
 		use: [],
 
 		routes: [
 			{
-				path: "/api",
-
 				whitelist: ["**"],
 
 				// Route-level Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
 				use: [],
 
 				// Enable/disable parameter merging method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Disable-merging
-				mergeParams: false,
+				mergeParams: true,
 
 				// Enable authentication. Implement the logic into `authenticate` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authentication
-				authentication: true,
+				authentication: false,
 
 				// Enable authorization. Implement the logic into `authorize` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authorization
-				authorization: true,
+				authorization: false,
 
 				// The auto-alias feature allows you to declare your route alias directly in your services.
 				// The gateway will dynamically build the full routes from service schema.
@@ -57,12 +55,11 @@ module.exports = {
 				 * @param {IncomingRequest} req
 				 * @param {ServerResponse} res
 				 * @param {Object} data
-				 * **/
+				 *
 				onBeforeCall(ctx, route, req, res) {
 					// Set request headers to context meta
 					ctx.meta.userAgent = req.headers["user-agent"];
-					ctx.meta.locale = req.headers["locale"];
-				},
+				}, */
 
 				/**
 				 * After call hook. You can modify the data.
@@ -75,38 +72,6 @@ module.exports = {
 					// Async function which return with Promise
 					return doSomething(ctx, res, data);
 				}, */
-
-				onError(req, res, err) {
-					this.logger.info(
-						`[www] Request Error: ${err.code} - ${err.message}`
-					);
-					this.logger.info(`[www] Request RES: ${res}`);
-					res.setHeader("Content-Type", "application/json");
-					res.writeHead(500);
-
-					if (err.code === 422) {
-						res.end(
-							JSON.stringify({
-								code: err,
-								message: "Invalid parameters. Please try again",
-							})
-						);
-						return;
-					}
-
-					res.end(
-						JSON.stringify({
-							code:
-								_.get(err, "name", null) === "MoleculerError"
-									? err.code
-									: 500,
-							message:
-								_.get(err, "name", null) === "MoleculerError"
-									? err.message
-									: "Server is maintaining. Please try again later.",
-						})
-					);
-				},
 
 				// Calling options. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Calling-options
 				callingOptions: {},
@@ -123,27 +88,12 @@ module.exports = {
 				},
 
 				// Mapping policy setting. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Mapping-policy
-				mappingPolicy: "restrict", // Available values: "all", "restrict"
+				mappingPolicy: "all", // Available values: "all", "restrict"
 
 				// Enable/disable logging
 				logging: true,
 			},
 		],
-
-		cors: {
-			// Configures the Access-Control-Allow-Origin CORS header.
-			origin: "*",
-			// Configures the Access-Control-Allow-Methods CORS header.
-			methods: ["GET", "OPTIONS", "POST", "PUT", "DELETE"],
-			// Configures the Access-Control-Allow-Headers CORS header.
-			allowedHeaders: ["*"],
-			// Configures the Access-Control-Expose-Headers CORS header.
-			exposedHeaders: ["*"],
-			// Configures the Access-Control-Allow-Credentials CORS header.
-			credentials: true,
-			// Configures the Access-Control-Max-Age CORS header.
-			maxAge: 3600,
-		},
 
 		// Do not log client side errors (does not log an error response when the error.code is 400<=X<500)
 		log4XXResponses: false,
@@ -162,7 +112,30 @@ module.exports = {
 	},
 
 	methods: {
-		authenticate: require("./methods/authenticate.method"),
-		authorize: require("./methods/authorize.method"),
+		/**
+		 * Authenticate the request. It check the `Authorization` token value in the request header.
+		 * Check the token value & resolve the user by the token.
+		 * The resolved user will be available in `ctx.meta.user`
+		 *
+		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
+		 *
+		 * @param {Context} ctx
+		 * @param {Object} route
+		 * @param {IncomingRequest} req
+		 * @returns {Promise}
+		 */
+		async authenticate(ctx, route, req) {},
+
+		/**
+		 * Authorize the request. Check that the authenticated user has right to access the resource.
+		 *
+		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
+		 *
+		 * @param {Context} ctx
+		 * @param {Object} route
+		 * @param {IncomingRequest} req
+		 * @returns {Promise}
+		 */
+		async authorize(ctx, route, req) {},
 	},
 };

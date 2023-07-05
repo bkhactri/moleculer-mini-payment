@@ -12,9 +12,13 @@
 	"success.getOrder": "Get order successfully",
 	"success.cancelOrder": "Order cancelled successfully",
 	"success.payOrder": "Successful order payment with amount %{amount}",
+	"success.processPayAtmOrder": "Successful process pay %{amount} with ATM Card",
+	"success.createPaymentHistory": "Successful to create payment history",
 
 	"fail.createOrder": "Order create failed",
 	"fail.cancelOrder": "Order cancel failed",
 	"fail.walletPayOrder": "Failed to process paying order with Wallet",
-	"fail.updateOrder": "Failed to update order"
+	"fail.atmCardPayOrder": "Failed to process paying order with ATM Card",
+	"fail.updateOrder": "Failed to update order",
+	"fail.createPaymentHistory": "Failed to create payment history"
 }

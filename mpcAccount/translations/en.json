@@ -21,11 +21,13 @@
 
 	"success.updated": "Updated successfully",
 	"success.updatedBalance": "Updated account balance successfully",
+	"success.createAtmTransaction": "Created ATM Card transaction successfully",
 	"success.getBalance": "Get account balance successfully",
 	"success.getAccount": "Get account successfully",
 
 	"fail.updated": "Updated failed",
 	"fail.updatedBalance": "Updated to account balance failed",
+	"fail.createAtmTransaction": "Created ATM Card transaction failed",
 	"fail.createPaymentHistory": "Failed to create payment history",
 
 	"field.invalid": "%{field} invalid"

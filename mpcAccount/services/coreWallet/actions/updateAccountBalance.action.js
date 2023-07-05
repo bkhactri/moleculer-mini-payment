@@ -59,9 +59,10 @@ module.exports = async function (ctx) {
 					amount,
 					total,
 					fee,
+					state: "PENDING",
 				},
 			],
-			{ retries: 5, delay: 500 }
+			{ retries: 3, delay: 200 }
 		);
 
 		if (!_.get(history, "id")) {
@@ -79,13 +80,38 @@ module.exports = async function (ctx) {
 		);
 
 		if (!updateAccountBalance.ok) {
-			throw new MoleculerError(this.t(ctx, "fail.updatedBalance"), 400);
+			throw new MoleculerError(
+				this.t(ctx, "fail.createAtmTransaction"),
+				400
+			);
+		}
+
+		// Update history
+
+		const updatedHistory = await this.broker.call(
+			"v1.historyModel.updateOne",
+			[
+				{ id: history.id },
+				{
+					$set: {
+						state: "COMPLETED",
+					},
+				},
+			],
+			{ retries: 3, delay: 200 }
+		);
+
+		if (!updatedHistory.ok) {
+			throw new MoleculerError(
+				this.t(ctx, "fail.createAtmTransaction"),
+				400
+			);
 		}
 
 		return {
 			ok: 1,
 			data: {
-				message: this.t(ctx, "success.updatedBalance"),
+				message: this.t(ctx, "success.createAtmTransaction"),
 				detail: {
 					accountId,
 					transaction,
