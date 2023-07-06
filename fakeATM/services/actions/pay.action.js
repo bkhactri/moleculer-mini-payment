@@ -40,7 +40,6 @@ module.exports = async function (ctx) {
 			},
 		};
 	} catch (error) {
-		console.log(JSON.stringify(error));
 		throw new MoleculerError(`[Fake ATM->Pay Action]: ${error.message}`);
 	}
 };

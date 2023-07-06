@@ -25,6 +25,7 @@
     "dotenv": "^16.1.4",
     "ioredis": "^5.0.0",
     "moleculer": "^0.14.26",
+    "moleculer-apollo-server": "^0.3.8",
     "moleculer-web": "^0.10.4",
     "nats": "^2.7.1"
   },

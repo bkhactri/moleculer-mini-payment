@@ -5,50 +5,82 @@ const PaymentConstants = require("../constants/payment.constant");
 
 module.exports = async function (ctx) {
 	try {
-		const { partnerTransaction, orderId, state } = ctx.params.body;
+		const supplierResponse = { ...ctx.params.body, receivedAt: new Date() };
+		const { partnerTransaction, orderId, state } = supplierResponse;
 
-		const updatedOrder = await this.broker.call(
-			"v1.orderModel.updateOne",
-			[
-				{ id: orderId },
-				{
-					$set: {
-						state:
-							state === "SUCCESS"
-								? PaymentConstants.ORDER_STATE.SUCCEEDED
-								: PaymentConstants.ORDER_STATE.FAILED,
+		// Checking order
+		const order = await this.broker.call("v1.orderModel.findOne", [
+			{ id: orderId },
+		]);
+
+		if (order.state === PaymentConstants.ORDER_STATE.PENDING) {
+			const updatedOrder = await this.broker.call(
+				"v1.orderModel.updateOne",
+				[
+					{ id: orderId },
+					{
+						$set: {
+							state:
+								state === "SUCCESS"
+									? PaymentConstants.ORDER_STATE.SUCCEEDED
+									: PaymentConstants.ORDER_STATE.FAILED,
+						},
 					},
-				},
-			],
-			{ retries: 3, delay: 300 }
-		);
+				],
+				{ retries: 3, delay: 300 }
+			);
 
-		if (!_.get(updatedOrder, "ok")) {
-			throw new MoleculerError(this.t(ctx, "fail.atmCardPayOrder"), 500);
-		}
+			if (!_.get(updatedOrder, "ok")) {
+				throw new MoleculerError(
+					this.t(ctx, "fail.atmCardPayOrder"),
+					500
+				);
+			}
 
-		const updatedHistory = await this.broker.call(
-			"v1.historyModel.updateOne",
-			[
-				{ orderId },
-				{
-					$set: {
-						partnerTransaction,
-						state:
-							state === "SUCCESS"
-								? PaymentConstants.HISTORY_STATE.COMPLETED
-								: PaymentConstants.HISTORY_STATE.FAILED,
+			const updatedHistory = await this.broker.call(
+				"v1.historyModel.updateOne",
+				[
+					{ orderId },
+					{
+						$set: {
+							partnerTransaction,
+							state:
+								state === "SUCCESS"
+									? PaymentConstants.HISTORY_STATE.COMPLETED
+									: PaymentConstants.HISTORY_STATE.FAILED,
+						},
+						$push: {
+							supplierResponses: supplierResponse,
+						},
 					},
-				},
-			],
-			{ retries: 3, delay: 300 }
-		);
+				],
+				{ retries: 3, delay: 300 }
+			);
 
-		if (!_.get(updatedHistory, "ok")) {
-			throw new MoleculerError(this.t(ctx, "fail.atmCardPayOrder"), 500);
+			if (!_.get(updatedHistory, "ok")) {
+				throw new MoleculerError(
+					this.t(ctx, "fail.atmCardPayOrder"),
+					500
+				);
+			}
+
+			return { ok: 1 };
+		} else {
+			// Order state is not PENDING
+			if (order.state === PaymentConstants.ORDER_STATE.SUCCEEDED) {
+				this.logger.warn(
+					this.t(ctx, "warn.IpnDuplicateCompletedOrder")
+				);
+
+				return { ok: 1 };
+			} else {
+				this.logger.error(this.t(ctx, "error.canNotProcessIPN"));
+				throw new MoleculerError(
+					this.t(ctx, "error.canNotProcessIPN"),
+					500
+				);
+			}
 		}
-
-		return { ok: 1 };
 	} catch (error) {
 		console.log(error);
 		throw new MoleculerError(`[Payment -> IPN Handler]: ${error.message}`);

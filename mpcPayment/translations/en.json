@@ -7,6 +7,7 @@
 	"error.orderNotAvailableToPay": "Order is note available to pay",
 	"error.balanceNotEnough": "Wallet balance not enough to complete the transaction",
 	"error.paymentMethodNotSupport": "Payment method has not been supported yet",
+	"error.canNotProcessIPN": "Order was cancelled or failed. Can not continue to resolve IPN",
 
 	"success.createOrder": "Order created successfully",
 	"success.getOrder": "Get order successfully",
@@ -20,5 +21,7 @@
 	"fail.walletPayOrder": "Failed to process paying order with Wallet",
 	"fail.atmCardPayOrder": "Failed to process paying order with ATM Card",
 	"fail.updateOrder": "Failed to update order",
-	"fail.createPaymentHistory": "Failed to create payment history"
+	"fail.createPaymentHistory": "Failed to create payment history",
+
+	"warn.IpnDuplicateCompletedOrder": "Order is completed. IPN may duplicate"
 }

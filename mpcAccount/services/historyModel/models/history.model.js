@@ -65,6 +65,11 @@ const HistorySchema = mongoose.Schema(
 			require: false,
 			default: null,
 		},
+		supplierResponses: {
+			type: [mongoose.Schema.Types.Mixed],
+			require: false,
+			default: [],
+		},
 	},
 	{
 		collection: "History",

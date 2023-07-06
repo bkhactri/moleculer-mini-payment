@@ -7,6 +7,7 @@
 	"error.orderNotAvailableToPay": "Không thể thanh toán đơn hàng này",
 	"error.balanceNotEnough": "Số dư không đủ để thực hiện giao dịch này",
 	"error.paymentMethodNotSupport": "Phương thức thanh toán chưa được hỗ trợ",
+	"error.canNotProcessIPN": "Đơn hàng bị huỷ hoặc thất bại. Không thể tiếp tục xử lí IPN",
 
 	"success.createOrder": "Tạo đơn hàng thành công",
 	"success.getOrder": "Lấy đơn hàng thành công",
@@ -20,5 +21,7 @@
 	"fail.walletPayOrder": "Thanh toán hoá đơn bằng Ví thất bại",
 	"fail.atmCardPayOrder": "Thanh toán hoá đơn bằng thẻ ATM thất bại",
 	"fail.updateOrder": "Cập nhật đơn hàng thất bại",
-	"fail.createPaymentHistory": "Tạo lệnh thanh toán thất bại"
+	"fail.createPaymentHistory": "Tạo lệnh thanh toán thất bại",
+
+	"warn.IpnDuplicateCompletedOrder": "Đơn hàng đã được hoàn thành. IPN có thể đã bị trùng"
 }
