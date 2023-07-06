@@ -9,7 +9,6 @@ module.exports = async function (ctx) {
 		setTimeout(() => {
 			// Handle pay FAKE PAY BY ATM CARD
 			// => ...
-
 			const { orderId, transaction, amount, notifyUrl } = ctx.params.body;
 
 			const partnerTransaction = uniqid();

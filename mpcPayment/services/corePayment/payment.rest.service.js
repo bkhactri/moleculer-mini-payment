@@ -137,17 +137,6 @@ module.exports = {
 			handler: require("./actions/cancelExpiredOrderAsync.action"),
 		},
 
-		createAtmCardTransaction: {
-			params: {
-				orderId: "number",
-				transaction: "string",
-				description: "string",
-				amount: "number",
-				currency: "string",
-			},
-			handler: require("./actions/createAtmCardTransaction.action"),
-		},
-
 		ipn: {
 			rest: {
 				method: "POST",
@@ -175,7 +164,9 @@ module.exports = {
 	/**
 	 * Methods
 	 */
-	methods: {},
+	methods: {
+		createAtmCardTransaction: require("./methods/createAtmCardTransaction.action"),
+	},
 
 	/**
 	 * Service created lifecycle event handler

@@ -44,6 +44,9 @@ module.exports = async function (ctx) {
 			}
 		}
 
+		// Calculate the increase amount (may negative) of the balance
+		let balanceIncrease = balanceBefore - balanceAfter;
+
 		// Create history to tracking
 		const history = await this.broker.call(
 			"v1.historyModel.create",
@@ -75,7 +78,7 @@ module.exports = async function (ctx) {
 		// If create history success process to update account balance
 		const updateAccountBalance = await this.broker.call(
 			"v1.walletModel.updateOne",
-			[{ accountId }, { $set: { balance: balanceAfter } }],
+			[{ accountId }, { $inc: { balance: balanceIncrease } }],
 			{ retries: 5, delay: 500 }
 		);
 
@@ -87,7 +90,6 @@ module.exports = async function (ctx) {
 		}
 
 		// Update history
-
 		const updatedHistory = await this.broker.call(
 			"v1.historyModel.updateOne",
 			[

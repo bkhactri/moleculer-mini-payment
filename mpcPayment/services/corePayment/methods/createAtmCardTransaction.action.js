@@ -1,11 +1,11 @@
 const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
 
-module.exports = async function (ctx) {
+module.exports = async function (
+	ctx,
+	{ orderId, transaction, description, amount, currency }
+) {
 	try {
-		const { orderId, transaction, description, amount, currency } =
-			ctx.params;
-
 		// Find any pending history with order transaction
 		let history = await this.broker.call("v1.historyModel.findOne", [
 			{ orderId, state: "PENDING" },

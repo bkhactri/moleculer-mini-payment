@@ -120,17 +120,14 @@ module.exports = async function (ctx) {
 			// cardNumber, cardOwnerName, effectiveDate
 			console.log("PAYMENT", payment);
 
-			const createAtmCardTransaction = await this.broker.call(
-				"v1.payment.createAtmCardTransaction",
-				{
+			const createAtmCardTransaction =
+				await this.createAtmCardTransaction(ctx, {
 					orderId: _.get(order, "id"),
 					transaction: _.get(order, "transaction"),
 					description: _.get(order, "description"),
 					amount: _.get(order, "amount"),
 					currency: _.get(order, "currency"),
-				},
-				{ retries: 5, delay: 500 }
-			);
+				});
 
 			if (!_.get(createAtmCardTransaction, "ok")) {
 				await this.broker.call(
