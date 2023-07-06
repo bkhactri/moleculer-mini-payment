@@ -163,7 +163,7 @@ module.exports = {
 					state: "string",
 				},
 			},
-			handler: require("./actions/ipn-handler.action"),
+			handler: require("./actions/ipnHandler.action"),
 		},
 	},
 
