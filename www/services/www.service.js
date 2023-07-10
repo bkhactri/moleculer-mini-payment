@@ -1,19 +1,41 @@
+/* eslint-disable no-unused-vars */
+
 "use strict";
 
 const _ = require("lodash");
 const ApiGateway = require("moleculer-web");
-
-/**
- * @typedef {import('moleculer').ServiceSchema} ServiceSchema Moleculer's Service Schema
- * @typedef {import('moleculer').Context} Context Moleculer's Context
- * @typedef {import('http').IncomingMessage} IncomingRequest Incoming HTTP Request
- * @typedef {import('http').ServerResponse} ServerResponse HTTP Server Response
- * @typedef {import('moleculer-web').ApiSettingsSchema} ApiSettingsSchema API Setting Schema
- */
+const { ApolloService } = require("moleculer-apollo-server");
 
 module.exports = {
 	name: "www",
-	mixins: [ApiGateway],
+	mixins: [
+		ApiGateway,
+		ApolloService({
+			// Global GraphQL typeDefs
+			typeDefs: require("./graphql/type"),
+
+			// Global resolvers
+			resolvers: require("./graphql/resolvers"),
+
+			// API Gateway route options
+			routeOptions: {
+				path: "/graphql",
+				cors: true,
+				mappingPolicy: "restrict",
+				authentication: true,
+				authorization: true,
+				auth: {
+					strategies: ["bo"],
+					mode: "try",
+				},
+			},
+
+			// https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html
+			serverOptions: {
+				tracing: true,
+			},
+		}),
+	],
 
 	/** @type {ApiSettingsSchema} More info about settings: https://moleculer.services/docs/0.14/moleculer-web.html */
 	settings: {

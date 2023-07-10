@@ -6,7 +6,6 @@
  */
 
 const { I18nMixin } = require("@codeyard/moleculer-i18n");
-const Polyglot = require("node-polyglot");
 
 /** @type {ServiceSchema} */
 module.exports = {
@@ -25,7 +24,6 @@ module.exports = {
 		i18n: {
 			dirName: "translations",
 			languages: ["en", "vi"],
-			polyglot: new Polyglot(),
 		},
 	},
 
@@ -56,7 +54,7 @@ module.exports = {
 					},
 				},
 			},
-			handler: require("./actions/register.action"),
+			handler: require("./actions/register.rest.action"),
 		},
 
 		login: {
@@ -71,7 +69,7 @@ module.exports = {
 					password: { type: "string", min: 6 },
 				},
 			},
-			handler: require("./actions/login.action"),
+			handler: require("./actions/login.rest.action"),
 		},
 
 		logout: {
@@ -79,7 +77,7 @@ module.exports = {
 				method: "POST",
 				path: "/logout",
 			},
-			handler: require("./actions/logout.action"),
+			handler: require("./actions/logout.rest.action"),
 		},
 
 		verifyToken: {
@@ -87,7 +85,7 @@ module.exports = {
 				token: "string",
 				userAgent: "string",
 			},
-			handler: require("./actions/verifyToken.action"),
+			handler: require("./actions/verifyToken.rest.action"),
 		},
 
 		forgotPassword: {
@@ -101,7 +99,7 @@ module.exports = {
 					email: { type: "email" },
 				},
 			},
-			handler: require("./actions/forgotPassword.action"),
+			handler: require("./actions/forgotPassword.rest.action"),
 		},
 
 		resetPassword: {
@@ -116,7 +114,7 @@ module.exports = {
 					newPassword: "string",
 				},
 			},
-			handler: require("./actions/resetPassword.action"),
+			handler: require("./actions/resetPassword.rest.action"),
 		},
 
 		getAccountInfo: {
@@ -128,7 +126,7 @@ module.exports = {
 				path: "/:id",
 			},
 			params: {},
-			handler: require("./actions/getAccountInfo.action"),
+			handler: require("./actions/getAccountInfo.rest.action"),
 		},
 
 		updateAccountInfo: {
@@ -152,7 +150,7 @@ module.exports = {
 					},
 				},
 			},
-			handler: require("./actions/updateAccountInfo.action"),
+			handler: require("./actions/updateAccountInfo.rest.action"),
 		},
 	},
 

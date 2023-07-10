@@ -6,7 +6,6 @@
 
 const RedLockMixin = require("../../mixins/lock.mixin");
 const { I18nMixin } = require("@codeyard/moleculer-i18n");
-const Polyglot = require("node-polyglot");
 const QueueMixin = require("moleculer-rabbitmq");
 
 const queueMixin = QueueMixin({
@@ -31,7 +30,6 @@ module.exports = {
 		i18n: {
 			dirName: "translations",
 			languages: ["en", "vi"],
-			polyglot: new Polyglot(),
 		},
 	},
 
@@ -69,7 +67,7 @@ module.exports = {
 					},
 				},
 			},
-			handler: require("./actions/createOrder.action"),
+			handler: require("./actions/createOrder.rest.action"),
 		},
 
 		getOrderInformation: {
@@ -78,7 +76,7 @@ module.exports = {
 				path: "/order/:transaction",
 			},
 			params: {},
-			handler: require("./actions/getOrderInformation.action"),
+			handler: require("./actions/getOrderInformation.rest.action"),
 		},
 
 		payOrder: {
@@ -98,7 +96,7 @@ module.exports = {
 					payment: "object",
 				},
 			},
-			handler: require("./actions/payOrder.action"),
+			handler: require("./actions/payOrder.rest.action"),
 		},
 
 		cancelOrder: {
@@ -115,7 +113,7 @@ module.exports = {
 					transaction: "string",
 				},
 			},
-			handler: require("./actions/cancelOrder.action"),
+			handler: require("./actions/cancelOrder.rest.action"),
 		},
 
 		cancelExpiredOrderAsync: {
@@ -134,7 +132,7 @@ module.exports = {
 			params: {
 				id: "number",
 			},
-			handler: require("./actions/cancelExpiredOrderAsync.action"),
+			handler: require("./actions/cancelExpiredOrderAsync.rest.action"),
 		},
 
 		ipn: {
@@ -152,7 +150,7 @@ module.exports = {
 					state: "string",
 				},
 			},
-			handler: require("./actions/ipnHandler.action"),
+			handler: require("./actions/ipnHandler.rest.action"),
 		},
 	},
 
@@ -165,7 +163,7 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
-		createAtmCardTransaction: require("./methods/createAtmCardTransaction.action"),
+		createAtmCardTransaction: require("./methods/createAtmCardTransaction.method"),
 	},
 
 	/**
