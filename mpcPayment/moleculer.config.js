@@ -228,7 +228,7 @@ module.exports = {
 	},
 
 	// Register custom middlewares
-	middlewares: [],
+	middlewares: [require("./middlewares/authenticate.graph.middleware")],
 
 	// Register custom REPL commands.
 	replCommands: null,

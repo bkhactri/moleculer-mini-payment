@@ -11,12 +11,6 @@ module.exports = {
 	mixins: [
 		ApiGateway,
 		ApolloService({
-			// Global GraphQL typeDefs
-			typeDefs: require("./graphql/type"),
-
-			// Global resolvers
-			resolvers: require("./graphql/resolvers"),
-
 			// API Gateway route options
 			routeOptions: {
 				path: "/graphql",
@@ -24,11 +18,16 @@ module.exports = {
 				mappingPolicy: "restrict",
 				authentication: true,
 				authorization: true,
-				auth: {
-					strategies: ["bo"],
-					mode: "try",
+
+				onBeforeCall(ctx, route, req, res) {
+					// Set request headers to context meta from GraphQL context
+					ctx.meta.userAgent = req.headers["user-agent"];
+					ctx.meta.locale = req.headers["locale"];
 				},
 			},
+
+			checkActionVisibility: true,
+			autoUpdateSchema: true,
 
 			// https://www.apollographql.com/docs/apollo-server/v2/api/apollo-server.html
 			serverOptions: {
