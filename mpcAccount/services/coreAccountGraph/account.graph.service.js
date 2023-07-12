@@ -75,7 +75,8 @@ module.exports = {
 
 		forgotPassword: {
 			graphql: {
-				query: "forgotPassword(input: MiniPaymentForgotPasswordInput!): MiniPaymentForgotPasswordOutput",
+				mutation:
+					"forgotPassword(input: MiniPaymentForgotPasswordInput!): MiniPaymentForgotPasswordOutput",
 			},
 			params: {
 				input: {
@@ -101,9 +102,9 @@ module.exports = {
 			handler: require("./actions/resetPassword.graph.action"),
 		},
 
-		getAccountInfo: {
+		accountInfo: {
 			graphql: {
-				query: "getAccountInfo(input: MiniPaymentGetAccountInfoInput!): MiniPaymentGetAccountInfoOutput",
+				query: "accountInfo(input: MiniPaymentGetAccountInfoInput!): MiniPaymentGetAccountInfoOutput",
 				auth: "required",
 			},
 			handler: require("./actions/getAccountInfo.graph.action"),

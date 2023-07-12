@@ -57,9 +57,9 @@ module.exports = {
 			handler: require("./actions/createOrder.graph.action"),
 		},
 
-		getOrderInformation: {
+		orderInformation: {
 			graphql: {
-				query: "getOrderInformation(input: MiniPaymentGetOrderInput!): MiniPaymentGetOrderOutput",
+				query: "orderInformation(input: MiniPaymentGetOrderInput!): MiniPaymentGetOrderOutput",
 			},
 			params: {
 				input: {
