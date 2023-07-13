@@ -53,7 +53,7 @@ module.exports = {
 		updateBalance: {
 			params: {
 				accountId: "number",
-				transaction: "number",
+				transaction: "string",
 				description: "string",
 				amount: "number",
 				fee: {

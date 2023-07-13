@@ -31,7 +31,7 @@ module.exports = async function (ctx) {
 			// Example fee and calculate total base on fee and amount
 			fee = 2000;
 			const processTransaction = await this.broker.call(
-				"v1.account.updateBalance",
+				"v1.wallet.updateBalance",
 				{
 					accountId,
 					transaction: order.transaction,
@@ -40,7 +40,7 @@ module.exports = async function (ctx) {
 					fee,
 					action: "SUBTRACT",
 				},
-				{ retries: 5, delay: 500 }
+				{ retries: 5, delay: 500, meta: { locale: ctx.meta.locale } }
 			);
 
 			if (!_.get(processTransaction, "ok")) {
@@ -84,7 +84,7 @@ module.exports = async function (ctx) {
 				if (!_.get(updateOrderInfo, "ok")) {
 					// Refund transaction
 					await this.broker.call(
-						"v1.account.updateBalance",
+						"v1.wallet.updateBalance",
 						{
 							accountId,
 							transaction: order.transaction,
@@ -93,7 +93,11 @@ module.exports = async function (ctx) {
 							fee,
 							action: "ADD",
 						},
-						{ retries: 5, delay: 500 }
+						{
+							retries: 5,
+							delay: 500,
+							meta: { locale: ctx.meta.locale },
+						}
 					);
 
 					throw new MoleculerError(

@@ -40,12 +40,12 @@ module.exports = async function (ctx) {
 					400
 				);
 			} else {
-				balanceAfter -= amount;
+				balanceAfter = balanceBefore - amount;
 			}
 		}
 
 		// Calculate the increase amount (may negative) of the balance
-		let balanceIncrease = balanceBefore - balanceAfter;
+		let balanceIncrease = balanceAfter - balanceBefore;
 
 		// Create history to tracking
 		const history = await this.broker.call(
@@ -110,6 +110,8 @@ module.exports = async function (ctx) {
 			);
 		}
 
+		await this.unlock(lock.key);
+
 		return {
 			ok: 1,
 			data: {
@@ -131,7 +133,5 @@ module.exports = async function (ctx) {
 		}
 
 		throw new MoleculerError(`[Account->Update Balance]: ${err.message}`);
-	} finally {
-		await this.unlock(lock.key);
 	}
 };
