@@ -44,6 +44,7 @@ module.exports = async function (ctx) {
 					{
 						$set: {
 							partnerTransaction,
+							completedAt: new Date(),
 							state:
 								state === "SUCCESS"
 									? PaymentConstants.HISTORY_STATE.COMPLETED

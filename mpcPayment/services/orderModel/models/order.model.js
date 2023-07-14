@@ -45,6 +45,7 @@ const OrderSchema = mongoose.Schema(
 		completedAt: {
 			type: Date,
 			required: false,
+			default: null,
 		},
 		paymentMethod: {
 			type: String,

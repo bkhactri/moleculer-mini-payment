@@ -152,6 +152,40 @@ module.exports = {
 			},
 			handler: require("./actions/ipnHandler.rest.action"),
 		},
+
+		statisticsByDay: {
+			rest: {
+				method: "GET",
+				path: "/statistics/time",
+			},
+			params: {
+				query: {
+					$$type: "object",
+					fromDate: "string",
+					toDate: "string",
+					paymentMethod: {
+						type: "string",
+						enum: ["WALLET", "ATM_CARD"],
+					},
+				},
+			},
+			handler: require("./actions/statisticsByDay.action"),
+		},
+		statisticsByCustomer: {
+			rest: {
+				method: "GET",
+				path: "/statistics/customer",
+			},
+			params: {
+				query: {
+					$$type: "object",
+					fromDate: "string",
+					toDate: "string",
+					accountId: "array",
+				},
+			},
+			handler: require("./actions/statisticsByCustomer.action"),
+		},
 	},
 
 	/**

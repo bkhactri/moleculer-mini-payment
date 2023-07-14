@@ -65,6 +65,11 @@ const HistorySchema = mongoose.Schema(
 			require: false,
 			default: null,
 		},
+		completedAt: {
+			type: Date,
+			required: false,
+			default: null,
+		},
 		supplierResponses: {
 			type: [mongoose.Schema.Types.Mixed],
 			require: false,

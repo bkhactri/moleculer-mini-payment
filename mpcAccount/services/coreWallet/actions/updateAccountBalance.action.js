@@ -97,6 +97,7 @@ module.exports = async function (ctx) {
 				{
 					$set: {
 						state: "COMPLETED",
+						completedAt: new Date(),
 					},
 				},
 			],
