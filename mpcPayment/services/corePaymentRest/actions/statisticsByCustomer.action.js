@@ -1,4 +1,6 @@
 const { MoleculerError } = require("moleculer").Errors;
+const PaymentConstant = require("../constants/payment.constant");
+const moment = require("moment");
 
 module.exports = async function (ctx) {
 	try {
@@ -6,8 +8,8 @@ module.exports = async function (ctx) {
 
 		const matchQuery = {
 			createdAt: {
-				$gte: new Date(fromDate),
-				$lte: new Date(toDate),
+				$gte: new Date(moment(fromDate).startOf("days").toISOString()),
+				$lte: new Date(moment(toDate).startOf("days").toISOString()),
 			},
 		};
 
@@ -32,7 +34,11 @@ module.exports = async function (ctx) {
 								$sum: {
 									$cond: [
 										{
-											$eq: ["$state", "COMPLETED"],
+											$eq: [
+												"$state",
+												PaymentConstant.HISTORY_STATE
+													.COMPLETED,
+											],
 										},
 										1,
 										0,
@@ -43,7 +49,11 @@ module.exports = async function (ctx) {
 								$sum: {
 									$cond: [
 										{
-											$eq: ["$state", "PENDING"],
+											$eq: [
+												"$state",
+												PaymentConstant.HISTORY_STATE
+													.PENDING,
+											],
 										},
 										1,
 										0,
@@ -54,7 +64,11 @@ module.exports = async function (ctx) {
 								$sum: {
 									$cond: [
 										{
-											$eq: ["$state", "FAILED"],
+											$eq: [
+												"$state",
+												PaymentConstant.HISTORY_STATE
+													.FAILED,
+											],
 										},
 										1,
 										0,
