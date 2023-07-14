@@ -165,12 +165,18 @@ module.exports = {
 					toDate: "string",
 					paymentMethod: {
 						type: "string",
+						optional: true,
 						enum: ["WALLET", "ATM_CARD"],
+					},
+					exportExcel: {
+						type: "string",
+						optional: true,
 					},
 				},
 			},
 			handler: require("./actions/statisticsByDay.action"),
 		},
+
 		statisticsByCustomer: {
 			rest: {
 				method: "GET",
@@ -181,7 +187,14 @@ module.exports = {
 					$$type: "object",
 					fromDate: "string",
 					toDate: "string",
-					accountId: "array",
+					accountIds: {
+						type: "string",
+						optional: true,
+					},
+					exportExcel: {
+						type: "string",
+						optional: true,
+					},
 				},
 			},
 			handler: require("./actions/statisticsByCustomer.action"),
@@ -197,6 +210,7 @@ module.exports = {
 	 * Methods
 	 */
 	methods: {
+		exportStatistics: require("./methods/export-statistic.method"),
 		createAtmCardTransaction: require("./methods/createAtmCardTransaction.method"),
 	},
 

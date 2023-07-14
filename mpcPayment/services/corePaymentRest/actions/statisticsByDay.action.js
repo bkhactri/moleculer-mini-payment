@@ -4,7 +4,10 @@ const moment = require("moment");
 
 module.exports = async function (ctx) {
 	try {
-		const { fromDate, toDate, paymentMethod } = ctx.params.query;
+		const { fromDate, toDate, paymentMethod, exportExcel } =
+			ctx.params.query;
+
+		console.log("exportExcel", exportExcel);
 
 		const statisticsDataByDate = await this.broker.call(
 			"v1.historyModel.aggregate",
@@ -12,17 +15,37 @@ module.exports = async function (ctx) {
 				[
 					{
 						$match: {
-							createdAt: {
-								$gte: new Date(
-									moment(fromDate)
-										.startOf("days")
-										.toISOString()
-								),
-								$lte: new Date(
-									moment(toDate).startOf("days").toISOString()
-								),
+							$expr: {
+								$and: [
+									{
+										$gte: [
+											"$createdAt",
+											{
+												$dateFromString: {
+													dateString:
+														moment(
+															fromDate
+														).toISOString(),
+												},
+											},
+										],
+									},
+									{
+										$lte: [
+											"$createdAt",
+											{
+												$dateFromString: {
+													dateString:
+														moment(
+															toDate
+														).toISOString(),
+												},
+											},
+										],
+									},
+								],
 							},
-							paymentMethod,
+							paymentMethod: paymentMethod || "WALLET",
 						},
 					},
 					{
@@ -96,13 +119,54 @@ module.exports = async function (ctx) {
 						},
 					},
 				],
-			]
+			],
+			{ retries: 3, delay: 500 }
 		);
 
-		return {
-			code: 200,
-			data: statisticsDataByDate,
-		};
+		if (exportExcel === "true") {
+			const fields = [
+				{ header: "Date", key: "_id", width: 10 },
+				{
+					header: "Total transactions",
+					key: "totalTransaction",
+					width: 10,
+				},
+				{
+					header: "Total completed transactions",
+					key: "totalSuccess",
+					width: 20,
+				},
+				{
+					header: "Total pending transactions",
+					key: "totalPending",
+					width: 20,
+				},
+				{
+					header: "Total failed transactions",
+					key: "totalFailed",
+					width: 20,
+				},
+			];
+
+			return this.exportStatistics(
+				ctx,
+				`Payment statistic from ${fromDate.replaceAll(
+					"/",
+					"-"
+				)} to ${toDate.replaceAll("/", "-")}`,
+				`payment-statistics-by-date-${fromDate.replaceAll(
+					"/",
+					"-"
+				)}-${toDate.replaceAll("/", "-")}.xlsx`,
+				fields,
+				statisticsDataByDate
+			);
+		} else {
+			return {
+				code: 200,
+				data: statisticsDataByDate,
+			};
+		}
 	} catch (err) {
 		if (err.name === "MoleculerError") throw err;
 		throw new MoleculerError(
