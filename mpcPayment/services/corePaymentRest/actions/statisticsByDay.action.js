@@ -49,15 +49,15 @@ module.exports = async function (ctx) {
 						},
 					},
 					{
-						$project: {
-							_id: 0,
-							date: {
+						$group: {
+							_id: {
 								$dateToString: {
 									format: "%Y/%m/%d",
 									date: "$createdAt",
 								},
 							},
-							completedCount: {
+							totalTransaction: { $sum: 1 },
+							totalSuccess: {
 								$sum: {
 									$cond: [
 										{
@@ -72,7 +72,7 @@ module.exports = async function (ctx) {
 									],
 								},
 							},
-							pendingCount: {
+							totalPending: {
 								$sum: {
 									$cond: [
 										{
@@ -87,7 +87,7 @@ module.exports = async function (ctx) {
 									],
 								},
 							},
-							failedCount: {
+							totalFailed: {
 								$sum: {
 									$cond: [
 										{
@@ -102,15 +102,6 @@ module.exports = async function (ctx) {
 									],
 								},
 							},
-						},
-					},
-					{
-						$group: {
-							_id: "$date",
-							totalTransaction: { $sum: 1 },
-							totalSuccess: { $sum: "$completedCount" },
-							totalPending: { $sum: "$pendingCount" },
-							totalFailed: { $sum: "$failedCount" },
 						},
 					},
 					{

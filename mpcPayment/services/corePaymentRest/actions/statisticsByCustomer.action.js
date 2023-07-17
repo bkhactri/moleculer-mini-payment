@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const { MoleculerError } = require("moleculer").Errors;
 const PaymentConstant = require("../constants/payment.constant");
 const moment = require("moment");
@@ -5,8 +6,7 @@ const moment = require("moment");
 module.exports = async function (ctx) {
 	try {
 		const { fromDate, toDate, accountIds, exportExcel } = ctx.params.query;
-
-		console.log("exportExcel", exportExcel);
+		const count = await this.broker.call("v1.historyModel.countRow", []);
 
 		const matchQuery = {
 			$expr: {
@@ -41,18 +41,23 @@ module.exports = async function (ctx) {
 			};
 		}
 
-		const statisticsDataByDate = await this.broker.call(
+		const statisticsTransByAccountId = await this.broker.call(
 			"v1.historyModel.aggregate",
 			[
 				[
 					{
 						$match: matchQuery,
 					},
+					// {
+					// 	$limit: 100000,
+					// },
 					{
-						$project: {
-							_id: 0,
-							userId: "$accountId",
-							completedCount: {
+						$group: {
+							_id: "$accountId",
+							totalTransaction: {
+								$sum: 1,
+							},
+							totalSuccess: {
 								$sum: {
 									$cond: [
 										{
@@ -67,7 +72,7 @@ module.exports = async function (ctx) {
 									],
 								},
 							},
-							pendingCount: {
+							totalPending: {
 								$sum: {
 									$cond: [
 										{
@@ -82,7 +87,7 @@ module.exports = async function (ctx) {
 									],
 								},
 							},
-							failedCount: {
+							totalFailed: {
 								$sum: {
 									$cond: [
 										{
@@ -99,48 +104,30 @@ module.exports = async function (ctx) {
 							},
 						},
 					},
-					{
-						$group: {
-							_id: "$userId",
-							totalTransaction: {
-								$sum: 1,
-							},
-							totalSuccess: {
-								$sum: "$completedCount",
-							},
-							totalPending: {
-								$sum: "$pendingCount",
-							},
-							totalFailed: {
-								$sum: "$failedCount",
-							},
-						},
-					},
-					{
-						$lookup: {
-							from: "Account",
-							localField: "_id",
-							foreignField: "id",
-							as: "account",
-						},
-					},
-					{
-						$unwind: {
-							path: "$account",
-						},
-					},
-					{
-						$project: {
-							_id: 0,
-							userName: "$account.fullName",
-							userId: "$account.id",
-							email: "$account.email",
-							total: "$totalTransaction",
-							success: "$totalSuccess",
-							pending: "$totalPending",
-							failed: "$totalFailed",
-						},
-					},
+					// {
+					// 	$lookup: {
+					// 		from: "Account",
+					// 		localField: "_id",
+					// 		foreignField: "id",
+					// 		as: "account",
+					// 	},
+					// },
+					// {
+					// 	$unwind: {
+					// 		path: "$account",
+					// 	},
+					// },
+					// {
+					// 	$project: {
+					// 		userName: "$account.fullName",
+					// 		userId: "$account.id",
+					// 		email: "$account.email",
+					// 		total: "$totalTransaction",
+					// 		success: "$totalSuccess",
+					// 		pending: "$totalPending",
+					// 		failed: "$totalFailed",
+					// 	},
+					// },
 					{
 						$sort: {
 							totalTransaction: -1,
@@ -153,34 +140,63 @@ module.exports = async function (ctx) {
 			{ retries: 3, delay: 500 }
 		);
 
+		const groupedAccountIds = statisticsTransByAccountId.map((tran) =>
+			_.get(tran, "_id")
+		);
+
+		const groupedAccountInfos = await this.broker.call(
+			"v1.accountModel.findMany",
+			[
+				{
+					id: {
+						$in: groupedAccountIds,
+					},
+				},
+			]
+		);
+
+		const hashMap = new Map();
+		groupedAccountInfos.forEach((acc) => {
+			hashMap.set(acc.id, acc);
+		});
+
+		const completeStatistics = statisticsTransByAccountId.map((tran) => {
+			const info = hashMap.get(_.get(tran, "_id"));
+
+			return {
+				...tran,
+				..._.pick(info, ["email", "fullName"]),
+			};
+		});
+
 		if (exportExcel === "true") {
 			const fields = [
-				{ header: "User", key: "userName", width: 10 },
-				{ header: "User Id", key: "userId", width: 10 },
+				{ header: "User", key: "fullName", width: 10 },
+				{ header: "User Id", key: "_id", width: 10 },
 				{ header: "User Email", key: "email", width: 10 },
 				{
 					header: "Total transactions",
-					key: "total",
+					key: "totalTransaction",
 					width: 10,
 				},
 				{
 					header: "Total completed transactions",
-					key: "success",
+					key: "totalSuccess",
 					width: 20,
 				},
 				{
 					header: "Total pending transactions",
-					key: "pending",
+					key: "totalPending",
 					width: 20,
 				},
 				{
 					header: "Total failed transactions",
-					key: "failed",
+					key: "totalFailed",
 					width: 20,
 				},
 			];
 
-			return this.exportStatistics(
+			return await this.exportStatistics(
 				ctx,
 				`Payment statistic from ${fromDate.replaceAll(
 					"/",
@@ -191,12 +207,13 @@ module.exports = async function (ctx) {
 					"-"
 				)}-${toDate.replaceAll("/", "-")}.xlsx`,
 				fields,
-				statisticsDataByDate
+				completeStatistics
 			);
 		} else {
 			return {
 				code: 200,
-				data: statisticsDataByDate,
+				count,
+				data: completeStatistics,
 			};
 		}
 	} catch (err) {
