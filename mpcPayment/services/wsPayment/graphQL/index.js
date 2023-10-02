@@ -1,7 +1,11 @@
 const gql = require("moleculer-apollo-server").moleculerGql;
 
+module.exports.query = {
+	wb: gql`WebSocket: WebSocket`,
+};
+
 module.exports.subscription = {
-	SocketAPP: gql`PaymentSocket(input: SocketAPPInput!): PaymentAPP`,
+	SocketAPP: gql`PaymentAPP(input: SocketAPPInput!): PaymentAPP`,
 };
 
 // Config graphql cho cấp global
@@ -11,11 +15,11 @@ module.exports.graphql = {
 	enum: require("./typeDefs/enum"),
 	resolvers: {
 		// Socket
-		PaymentSocket: {
+		PaymentAPP: {
 			payment: {
 				context: true,
-				action: "v1.wsPayment.socketPayment"
-			}
+				action: "v1.wsPayment.socketPayment",
+			},
 		},
-	}
+	},
 };

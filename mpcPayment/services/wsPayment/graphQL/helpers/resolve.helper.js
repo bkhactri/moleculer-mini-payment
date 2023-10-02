@@ -3,6 +3,6 @@ module.exports.resolver = (action, opts = { dataloader: false }) => ({
 	dataLoader: opts.dataloader,
 	rootParams: { resolve: "rootParams" },
 	params: {
-		isResolve: true
-	}
+		isResolve: true,
+	},
 });

@@ -58,12 +58,20 @@ module.exports = async function (ctx) {
 				{ retries: 3, delay: 300 }
 			);
 
+			const socketParams = {};
+			socketParams.orderId = orderId;
+			socketParams.transactionId = partnerTransaction;
+
 			if (!_.get(updatedHistory, "ok")) {
-				throw new MoleculerError(
-					this.t(ctx, "fail.atmCardPayOrder"),
-					500
-				);
+				socketParams.state = "FAILED";
+			} else {
+				socketParams.state = "SUCCEEDED";
 			}
+
+			this.broker.broadcast("graphql.publish", {
+				tag: "PAYMENT-APP",
+				payload: socketParams,
+			});
 
 			return { ok: 1 };
 		} else {
