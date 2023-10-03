@@ -3,7 +3,6 @@
  * @typedef {import('moleculer').ServiceSchema} ServiceSchema Moleculer's Service Schema
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
-
 const RedLockMixin = require("../../mixins/lock.mixin");
 const { I18nMixin } = require("@codeyard/moleculer-i18n");
 const QueueMixin = require("moleculer-rabbitmq");
@@ -79,13 +78,29 @@ module.exports = {
 			handler: require("./actions/getOrderInformation.rest.action"),
 		},
 
-		payOrder: {
+		payOrderWallet: {
 			rest: {
 				auth: {
 					mode: "required",
 				},
 				method: "POST",
-				path: "/order/pay",
+				path: "/order/pay/wallet",
+			},
+			params: {
+				body: {
+					$$type: "object",
+					transaction: {
+						type: "string",
+					}
+				},
+			},
+			handler: require("./actions/payOrderWallet.rest.action"),
+		},
+
+		payOrderAtm: {
+			rest: {
+				method: "POST",
+				path: "/order/pay/atm",
 			},
 			params: {
 				body: {
@@ -93,10 +108,38 @@ module.exports = {
 					transaction: {
 						type: "string",
 					},
-					payment: "object",
+					payment: {
+						$$type: "object",
+						cardNumber: {
+							type: "string",
+							optional: false,
+							example: "21864431004",
+							description: "Card number"
+						},
+						cardNameHolder: {
+							type: "string",
+							optional: false,
+							example: "James Cameron",
+							description: "Card name holder"
+						},
+						expiredDate: {
+							type: "string",
+							example: "03/2023",
+							optional: true,
+							description: "Ngày hết hạng, MM/YYYY"
+						},
+						cvc: {
+							type: "number",
+							optional: false,
+							example: 356,
+							min: 100,
+							max: 999,
+							description: "CVC Secret number"
+						},
+					},
 				},
 			},
-			handler: require("./actions/payOrder.rest.action"),
+			handler: require("./actions/payOrderAtm.rest.action"),
 		},
 
 		cancelOrder: {
@@ -217,15 +260,15 @@ module.exports = {
 	/**
 	 * Service created lifecycle event handler
 	 */
-	created() {},
+	created() { },
 
 	/**
 	 * Service started lifecycle event handler
 	 */
-	async started() {},
+	async started() { },
 
 	/**
 	 * Service stopped lifecycle event handler
 	 */
-	async stopped() {},
+	async stopped() { },
 };

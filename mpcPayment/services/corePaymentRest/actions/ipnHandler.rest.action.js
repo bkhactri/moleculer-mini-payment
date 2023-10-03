@@ -67,7 +67,7 @@ module.exports = async function (ctx) {
 			} else {
 				socketParams.state = "SUCCEEDED";
 			}
-
+			console.log("socketParams", socketParams);
 			this.broker.broadcast("graphql.publish", {
 				tag: "PAYMENT-APP",
 				payload: socketParams,

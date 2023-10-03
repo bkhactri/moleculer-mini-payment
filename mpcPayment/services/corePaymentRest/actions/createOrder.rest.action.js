@@ -40,6 +40,7 @@ module.exports = async function (ctx) {
 				message: this.t(ctx, "success.createOrder"),
 				urlPath: `payment/order?transaction=${transaction}`,
 				order: _.pick(newOrder, [
+					"id",
 					"transaction",
 					"amount",
 					"state",
